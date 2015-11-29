@@ -22,6 +22,9 @@ namespace SmartTransferServer
     {
         public MainWindow()
         {
+            XmlManager teset = new XmlManager();
+            teset.addChildToCategory(Categories.EBOOKS, "Test:/lool");
+            teset.saveXml();
             InitializeComponent();
         }
     }
