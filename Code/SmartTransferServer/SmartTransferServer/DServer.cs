@@ -102,8 +102,7 @@ namespace SmartTransferServer
                 else
                 {
                     //No access, because other user is using the server
-                    ResponseCommand = MyCommandFactory.createCommand(-1, "SERVER", 7, "none", "Access denied", "none");
-                    continue;
+                    ResponseCommand = MyExecutor.createErrorCommand(CurrentCommand);
                 }
                 //Send response
                 sendResponseCommand(ResponseCommand);
