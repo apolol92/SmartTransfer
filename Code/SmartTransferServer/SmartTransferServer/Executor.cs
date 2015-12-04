@@ -18,10 +18,10 @@ namespace SmartTransferServer
         const int SEND_DATA_TO_CLIENT = 6;
         const int STATUS = 7;
         const int CLIENT_LOGOUT = 8;
-
-        public Executor()
+        Guardian guardian;
+        public Executor(Guardian guardian)
         {
-            
+            this.guardian = guardian;
         }
 
         public Command execute(Command cmd)
@@ -39,13 +39,14 @@ namespace SmartTransferServer
                     return keepALive(cmd);
                 case GET_AVAIBLE_FILES:
                     return getAvaibleFiles(cmd);
+                case CLIENT_LOGOUT:
+                    return logout(cmd);
                 default:
                     return createErrorCommand(cmd);
             }
         }
 
-        
-
+      
         private Command getDataFromServer(Command cmd)
         {
             string category = cmd.Parameter;
@@ -108,6 +109,13 @@ namespace SmartTransferServer
             }
             files = files.Substring(0, files.Length - 1);
             return files;
+        }
+
+        private Command logout(Command cmd)
+        {
+            this.guardian.setGuardingId(Guardian.NOBODY_GUARDED);
+            CommandFactory cmdFactory = new CommandFactory();
+            return cmdFactory.createCommand(cmd.Id, SERVERNAME, STATUS, "none", "logout", "none");
         }
     }
 

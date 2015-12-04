@@ -10,23 +10,22 @@ namespace SmartTransferServer
     {
         public string loadFile(string category, string filename)
         {
-
             return "";
         }
 
-        internal void saveFile(string category, string filename)
+        public void saveFile(string category, string filename)
         {
-            throw new NotImplementedException();
+            
         }
 
-        internal void deleteFile(string category, string filename)
+        public void deleteFile(string category, string filename)
         {
-            throw new NotImplementedException();
+            
         }
 
-        internal List<string> listAllFilesInCategoryFolders(List<string> allPaths)
+        public List<string> listAllFilesInCategoryFolders(List<string> allPaths)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

@@ -78,7 +78,7 @@ namespace SmartTransferServer
             //This Guardian protects the current user
             Guardian MyGuardian = new Guardian();
             //This Executor executes commands
-            Executor MyExecutor = new Executor();
+            Executor MyExecutor = new Executor(MyGuardian);
             while (true)
             {
                 //This Command will be the response command

@@ -8,7 +8,7 @@ namespace SmartTransferServer
 {
     class Guardian
     {
-        const int NOBODY_GUARDED = -1;
+        public const int NOBODY_GUARDED = -1;
         int guardedId;
 
         public Guardian()
@@ -26,6 +26,11 @@ namespace SmartTransferServer
             //TODO: Should be a better method..
             Random rnd = new Random();
             return rnd.Next(1, 1000);
+        }
+
+        public void setGuardingId(int id)
+        {
+            this.guardedId = id;
         }
 
         public int getGuardingId()
