@@ -30,23 +30,55 @@ namespace SmartTransferServer
         /// Our byte message.. we will cast I_AM_HERE to bytes
         /// </summary>
         byte[] bytes;
+        /// <summary>
+        /// Sends every n_secs a broadcast
+        /// </summary>
+        int n_secs;
+        /// <summary>
+        /// BroadcastSender active?
+        /// </summary>
+        bool active;
+
+        public bool Active
+        {
+            get
+            {
+                return active;
+            }
+
+            set
+            {
+                active = value;
+            }
+        }
 
         /// <summary>
         /// Initiliaze the BroadcastSender
         /// </summary>
-        public BroadcastSender()
+        public BroadcastSender(int n_secs)
         {
             this.client = new UdpClient();
             this.ip = new IPEndPoint(IPAddress.Any, PORT_NUMBER);
             this.bytes = Encoding.ASCII.GetBytes(I_AM_HERE);
+            this.Active = true;
         }
 
         /// <summary>
-        /// This method sends the broadcast
+        /// This method sends every 5 seconds a broadcast
         /// </summary>
-        public void send()
+        public void run()
         {
-            this.client.Send(this.bytes, this.bytes.Length, this.ip);
+            while(this.active)
+            {
+                this.client.Send(this.bytes, this.bytes.Length, this.ip);
+            }
+        }
+
+        /// <summary>
+        /// Cleans the Sender..
+        /// </summary>
+        public void clean()
+        {
             this.client.Close();
         }
     }

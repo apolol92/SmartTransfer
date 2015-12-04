@@ -124,11 +124,5 @@ namespace SmartTransferServer
             this.xmldoc.Save(CONFIG_PATH);
         }
 
-
-
-
-
-        
-
     }
 }
