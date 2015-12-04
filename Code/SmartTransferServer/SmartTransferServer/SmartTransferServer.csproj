@@ -59,6 +59,7 @@
     <Compile Include="Command.cs" />
     <Compile Include="CommandFactory.cs" />
     <Compile Include="DServer.cs" />
+    <Compile Include="Executor.cs" />
     <Compile Include="Guardian.cs" />
     <Compile Include="XmlManager.cs" />
     <Page Include="MainWindow.xaml">

@@ -56,21 +56,57 @@ namespace SmartTransferServer
             }
             return RequestCommandStr;
         }
+        /// <summary>
+        /// This method sends the response of the request command
+        /// </summary>
+        /// <param name="ResponseCommand"></param>
+        public void sendResponseCommand(Command ResponseCommand)
+        {
+            CommandFactory cmdFactory = new CommandFactory();
+            //To be sure that cmd is really marked..
+            ResponseCommand = cmdFactory.markAllSpecialCharacters(ResponseCommand);
+            this.server.Server.Send(Encoding.ASCII.GetBytes(ResponseCommand.toString()));
+        }
 
         /// <summary>
         /// Use this method to run the server
         /// </summary>
         public void run()
         {
-            
+            //This Factory creates commands
+            CommandFactory MyCommandFactory = new CommandFactory();
+            //This Guardian protects the current user
+            Guardian MyGuardian = new Guardian();
+            //This Executor executes commands
+            Executor MyExecutor = new Executor();
             while (true)
             {
+                //This Command will be the response command
+                Command ResponseCommand;
                 //Wait for a client
                 TcpClient client = server.AcceptTcpClient();
                 //Get RequestCommand as String
                 String RequestCommandStr = getRequestCommandStr(client);
                 //Extract RequestCommandStr
-
+                Command CurrentCommand = MyCommandFactory.extractCommandFromStr(RequestCommandStr);
+                //Is no user under protection?
+                if (!MyGuardian.isGuarding())
+                {
+                    CurrentCommand.Id = MyGuardian.generateGuardingId();
+                }
+                //Is this the protected user?
+                if(MyGuardian.getGuardingId()==CurrentCommand.Id)
+                {
+                    ResponseCommand = MyExecutor.execute(CurrentCommand);
+                }
+                else
+                {
+                    //No access, because other user is using the server
+                    ResponseCommand = MyCommandFactory.createCommand(-1, "SERVER", 7, "none", "Access denied", "none");
+                    continue;
+                }
+                //Send response
+                sendResponseCommand(ResponseCommand);
             }
         }
     }

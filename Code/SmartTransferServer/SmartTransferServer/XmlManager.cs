@@ -16,7 +16,6 @@ namespace SmartTransferServer
     /// </summary>
     enum Categories { MUSIC, IMAGES, VIDEOS, EBOOKS, OTHERS};
 
-
     /// <summary>
     /// This class manages the server xml-file.
     /// This file is the configuration-file.
@@ -76,13 +75,26 @@ namespace SmartTransferServer
         /// <param name="childValue">string-value</param>
         public void addChildToCategory(Categories category,String childValue)
         {
-            
             XmlNode node = root.SelectSingleNode(category.ToString());
             int childAmount = node.ChildNodes.Count;
             XmlNode nChild = this.xmldoc.CreateElement("value"+childAmount);
             nChild.InnerText = childValue;
             //nChild.
             node.AppendChild(nChild);
+        }
+        /// <summary>
+        /// Get all childs
+        /// </summary>
+        /// <returns></returns>
+        public List<String> getAllChilds()
+        {
+            List<String> allChilds = new List<string>();
+            for (int i = 0; i < Enum.GetValues(typeof(Categories)).Length; i++)
+            {
+                String category = Enum.GetName(typeof(Categories), i).ToString();
+                allChilds.AddRange(getAllChildsFrom((Categories)Enum.Parse(typeof(Categories), category)));
+            }
+            return allChilds;
         }
         /// <summary>
         /// Get all childs of a category

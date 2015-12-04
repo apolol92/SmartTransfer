@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace SmartTransferServer
 {
-
     class Command
     {
         int id;
