@@ -62,7 +62,7 @@ namespace SmartTransferServer
             string category = cmd.Parameter;
             string filename = cmd.Filename;
             FileManager MyFileManager = new FileManager();
-            MyFileManager.saveFile(category, filename);
+            MyFileManager.saveFile(filename,cmd.Data);
             CommandFactory cmdFactory = new CommandFactory();
             return cmdFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", "none");
         }
@@ -72,7 +72,7 @@ namespace SmartTransferServer
             string category = cmd.Parameter;
             string filename = cmd.Filename;
             FileManager MyFileManager = new FileManager();
-            MyFileManager.deleteFile(category, filename);
+            MyFileManager.deleteFile(filename);
             CommandFactory cmdFactory = new CommandFactory();
             return cmdFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "deleted file", "none");
         }
