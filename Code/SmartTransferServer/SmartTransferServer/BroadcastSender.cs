@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SmartTransferServer
@@ -17,7 +18,7 @@ namespace SmartTransferServer
         /// <summary>
         /// We will send this message
         /// </summary>
-        public const string I_AM_HERE = "I'm your SmartTransferServer";
+        public const string I_AM_HERE = "I'm your SmartTransferServer\n";
         /// <summary>
         /// This his the UdpClient, which is used for sending
         /// </summary>
@@ -58,9 +59,10 @@ namespace SmartTransferServer
         public BroadcastSender(int n_secs)
         {
             this.client = new UdpClient();
-            this.ip = new IPEndPoint(IPAddress.Any, PORT_NUMBER);
+            this.ip = new IPEndPoint(IPAddress.Parse("255.255.255.255"), PORT_NUMBER);
             this.bytes = Encoding.ASCII.GetBytes(I_AM_HERE);
             this.Active = true;
+            this.n_secs = n_secs;
         }
 
         /// <summary>
@@ -71,6 +73,7 @@ namespace SmartTransferServer
             while(this.active)
             {
                 this.client.Send(this.bytes, this.bytes.Length, this.ip);
+                Thread.Sleep(this.n_secs * 1000);
             }
         }
 

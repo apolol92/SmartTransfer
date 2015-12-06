@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,9 +23,17 @@ namespace SmartTransferServer
     {
         public MainWindow()
         {
-            XmlManager teset = new XmlManager();
-            teset.addChildToCategory(Categories.EBOOKS, "Test:/lool");
-            teset.saveXml();
+            XmlManager xmlManager = new XmlManager();
+            xmlManager.addChildToCategory(Categories.IMAGES, "C:/Users/gross/Pictures");
+            xmlManager.addChildToCategory(Categories.MUSIC, "C:/Users/gross/Music");
+            xmlManager.addChildToCategory(Categories.VIDEOS, "C:/Users/gross/Videos");
+            xmlManager.saveXml();
+            BroadcastSender mBroadcastSender = new BroadcastSender(1);
+            Thread BcSender = new Thread(mBroadcastSender.run);
+            BcSender.Start();
+            DServer MyDServer = new DServer();
+            Thread dservThread = new Thread(MyDServer.run);
+            dservThread.Start();
             InitializeComponent();
         }
     }
