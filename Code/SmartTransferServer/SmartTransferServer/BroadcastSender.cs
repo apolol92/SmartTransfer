@@ -18,7 +18,7 @@ namespace SmartTransferServer
         /// <summary>
         /// We will send this message
         /// </summary>
-        public const string I_AM_HERE = "I'm your SmartTransferServer\n";
+        public const string I_AM_HERE = "SmartTransferServer\n";
         /// <summary>
         /// This his the UdpClient, which is used for sending
         /// </summary>

@@ -7,6 +7,8 @@ import java.lang.reflect.Array;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -36,24 +38,26 @@ public class ServerFinder {
      */
     public ArrayList<ServerInfo> findServers() {
         ArrayList<ServerInfo> allServer = new ArrayList<ServerInfo>();
-        java.util.Date date= new java.util.Date();
+        Long tsLong = System.currentTimeMillis()/1000;
+        String ts = tsLong.toString();
         try {
             MulticastSocket mSocket = new MulticastSocket(MULTICAST_PORT);
-            long startingtime = date.getTime();
-            while (startingtime-date.getTime()<=5) {
+
+            while (System.currentTimeMillis()/1000 -  tsLong <=5) {
                 byte data[] = new byte[500];
                 try {
                     DatagramPacket packet = new DatagramPacket(data,data.length);
                     mSocket.receive(packet);
                     Log.d("Hallo", String.valueOf(packet.getAddress()));
                     String msg = Arrays.toString(packet.getData());
-                    if(msg.compareTo(DSERVER_MSG)==0){
+                    if(msg.compareTo(DSERVER_MSG)==0) {
                         ServerInfo serverInfo = new ServerInfo(packet.getAddress());
                         //TODO something with ServerInfo
                         allServer.add(serverInfo);
                     }
 
                 } catch (UnknownHostException e) {
+
                     e.printStackTrace();
                 }
             }

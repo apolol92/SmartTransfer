@@ -1,16 +1,43 @@
 package app.transfer.smart.smarttransferapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class WelcomeActivity extends AppCompatActivity {
-
+    ArrayList<ServerInfo> serverInfos;
+    TextView tvStatus;
+    Button btConnect;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+      ServerFinder serverFinder = new ServerFinder();
+        serverInfos = serverFinder.findServers();
+//        tvStatus = (TextView)findViewById(R.id.textView);
+//        btConnect = (Button)findViewById(R.id.btConnect);
+//        btConnect.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    User.getInstance().init(serverInfos.get(0));
+//                    Intent mIntent = new Intent(getApplication(),MainActivity.class);
+//                    startActivity(mIntent);
+//                }
+//                catch (Exception ex) {
+//                    tvStatus.setText("No Server avaible..");
+//                }
+//
+//
+//            }
+//        });
     }
 
     @Override
