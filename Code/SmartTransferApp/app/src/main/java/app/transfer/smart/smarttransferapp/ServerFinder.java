@@ -55,6 +55,7 @@ public class ServerFinder {
                         //TODO something with ServerInfo
                         allServer.add(serverInfo);
                     }
+                    Log.d("Searching","Searching for servers");
 
                 } catch (UnknownHostException e) {
 

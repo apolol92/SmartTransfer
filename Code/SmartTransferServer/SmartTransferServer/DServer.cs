@@ -68,6 +68,17 @@ namespace SmartTransferServer
             this.server.Server.Send(Encoding.ASCII.GetBytes(ResponseCommand.toString()));
         }
 
+        private static int generateNewId(int lastId)
+        {
+            int nId = lastId;
+            Random rnd = new Random();
+            while (nId == lastId)
+            {
+                nId = rnd.Next(0, Int32.MaxValue);
+            }
+            return nId;
+        }
+
         /// <summary>
         /// Use this method to run the server
         /// </summary>
@@ -89,24 +100,70 @@ namespace SmartTransferServer
                 String RequestCommandStr = getRequestCommandStr(client);
                 //Extract RequestCommandStr
                 Command CurrentCommand = MyCommandFactory.extractCommandFromStr(RequestCommandStr);
-                //Is no user under protection?
-                if (!MyGuardian.isGuarding())
+                //Wrong command?
+                if(CurrentCommand == null)
                 {
-                    CurrentCommand.Id = MyGuardian.generateGuardingId();
+                    continue;
                 }
-                //Is this the protected user?
-                if(MyGuardian.getGuardingId()==CurrentCommand.Id)
+                //Is no user under protection/login?
+                if (!MyGuardian.isGuarding() && CurrentCommand.Typ ==9)
                 {
+                    //If Password correct.. Login
+                    if (CurrentCommand.Parameter == MyGuardian.ServerPassword)
+                    {
+                        CurrentCommand.Id = MyGuardian.generateGuardingId();
+                        //Activate keep alive
+                        MyGuardian.keepClientAlive();
+                    }
+                    else
+                    {
+                        //TODO: Wrong PASSWORD!!
+                    }
+                }
+                //No user is logged in, but no incoming login
+                else if(!MyGuardian.isGuarding() && CurrentCommand.Typ != 9)
+                {
+                    //Continue if no login
+                    continue;
+                }
+                //Is this the protected user & all alright?
+                if(MyGuardian.getGuardingId()==CurrentCommand.Id && MyGuardian.isClientAlive())
+                {
+                    ResponseCommand = MyExecutor.execute(CurrentCommand);
+                    //Generate new ID for security reasons
+                    ResponseCommand.Id = generateNewId(CurrentCommand.Id);
+                    //Let the new ID know by the guardian
+                    MyGuardian.setGuardingId(ResponseCommand.Id);
+                }
+                //Client is dead and sent command to late
+                else if(MyGuardian.getGuardingId() == CurrentCommand.Id && !MyGuardian.isClientAlive())
+                {
+                    CurrentCommand.Typ = 8; //Simulate User logout
+                    //Kill Client..
+                    ResponseCommand = MyExecutor.execute(CurrentCommand);
+                }
+                //Other user is connecting while main user is dead
+                else if(!MyGuardian.isClientAlive())
+                {
+                    //Reset rest
+                    MyGuardian.resetProtection();
+                    //Generate new command
+                    CurrentCommand.Id = MyGuardian.generateGuardingId();
+                    //Activate keep alive
+                    MyGuardian.keepClientAlive();
+                    //Create Response with login successed
                     ResponseCommand = MyExecutor.execute(CurrentCommand);
                 }
                 else
                 {
                     //No access, because other user is using the server
                     ResponseCommand = MyExecutor.createErrorCommand(CurrentCommand);
-                }
-                //Send response
+                }              
+                //Send response             
                 sendResponseCommand(ResponseCommand);
             }
         }
     }
+
+   
 }

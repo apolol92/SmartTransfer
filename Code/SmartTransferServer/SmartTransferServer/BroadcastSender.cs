@@ -63,6 +63,7 @@ namespace SmartTransferServer
             this.bytes = Encoding.ASCII.GetBytes(I_AM_HERE);
             this.Active = true;
             this.n_secs = n_secs;
+            this.n_secs = 1;
         }
 
         /// <summary>

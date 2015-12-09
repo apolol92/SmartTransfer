@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace SmartTransferServer
 {
     class Executor
     {
         const string SERVERNAME = "SERVER";
+        const string PLUS_CHAR = "anerhponqwasdgnpoegnaobqb";
         const int GET_DATA_FROM_SERVER = 0;
         const int SAVE_DATA_ON_SERVER = 1;
         const int DELETE_FILE_FROM_SERVER = 2;
@@ -18,6 +20,9 @@ namespace SmartTransferServer
         const int SEND_DATA_TO_CLIENT = 6;
         const int STATUS = 7;
         const int CLIENT_LOGOUT = 8;
+        const int CLIENT_LOGIN = 9;
+        const int CLIENT_WANT_THUMBNAIL = 10;
+        const int SEND_CLIENT_THUMBNAIL = 11;
         Guardian guardian;
         public Executor(Guardian guardian)
         {
@@ -41,12 +46,27 @@ namespace SmartTransferServer
                     return getAvaibleFiles(cmd);
                 case CLIENT_LOGOUT:
                     return logout(cmd);
+                case CLIENT_LOGIN:
+                    return login(cmd);
+                case CLIENT_WANT_THUMBNAIL:
+                    return thumbnail(cmd);
                 default:
                     return createErrorCommand(cmd);
             }
         }
 
-      
+        private Command thumbnail(Command cmd)
+        {
+            CommandFactory cmdFactory = new CommandFactory();
+            return cmdFactory.createCommand(cmd.Id, SERVERNAME, SEND_CLIENT_THUMBNAIL, cmd.Filename, "will coming soon", "none");
+        }
+
+        private Command login(Command cmd)
+        {
+            CommandFactory cmdFactory = new CommandFactory();
+            return cmdFactory.createCommand(cmd.Id, SERVERNAME, STATUS, "none", "login success", "none");
+        }
+
         private Command getDataFromServer(Command cmd)
         {
             string category = cmd.Parameter;
@@ -79,6 +99,7 @@ namespace SmartTransferServer
 
         private Command keepALive(Command cmd)
         {
+            this.guardian.keepClientAlive();
             //TODO!!
             CommandFactory cmdFactory = new CommandFactory();
             return cmdFactory.createCommand(cmd.Id, SERVERNAME, STATUS, "none", "alive", "none");
@@ -105,8 +126,10 @@ namespace SmartTransferServer
             string files = "";
             for(int i = 0; i < allFiles.Count; i++)
             {
-                files += allFiles[i] + "+";
+                //Replace '+', because some files have a name with a '+'
+                files += allFiles[i].Replace("+",PLUS_CHAR) + "+";
             }
+            //Remove last concatting '+'
             files = files.Substring(0, files.Length - 1);
             return files;
         }
