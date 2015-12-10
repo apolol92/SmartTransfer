@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.IO;
+
+
 
 namespace SmartTransferServer
 {
@@ -95,5 +98,7 @@ namespace SmartTransferServer
             this.guardedId = NOBODY_GUARDED;
             this.lastKeepAlive = NOT_NEEDED_BECAUSE_NO_LOGIN;
         }
+
+        
     }
 }
