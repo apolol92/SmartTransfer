@@ -22,6 +22,7 @@ namespace SmartTransferServer_V2._0
         const int SEND_CLIENT_THUMBNAIL = 11;
         Authenticator SmartAuthenticator;
         Killer SmartKiller;
+
         public Executor(Authenticator SmartAuthenticator, Killer SmartKiller)
         {
             this.SmartAuthenticator = SmartAuthenticator;
@@ -111,7 +112,7 @@ namespace SmartTransferServer_V2._0
             {
                 FileManager fileManager = new FileManager();
                 fileManager.deleteFile(cmd.Filename);
-                return cmdFactory.extractCommandFromStr("{42;SERVER;7;"+cmd.Filename+";OK;none}");
+                return cmdFactory.extractCommandFromStr("{42;SERVER;7;"+cmd.Filename+";deleted file;none}");
             }
             return cmdFactory.extractCommandFromStr("{-1;SERVER;7;" + cmd.Filename + ";cant delete file;none}");
         }
@@ -125,11 +126,12 @@ namespace SmartTransferServer_V2._0
             string filename = cmd.Filename;
             FileManager MyFileManager = new FileManager();
             CommandFactory cmdFactory = new CommandFactory();
-            if (SmartSecurity.PathIsAllowed(allRootPaths, cmd.Filename))
+            if (SmartSecurity.PathIsAllowed(allRootPaths, filename))
             {
                 MyFileManager.saveFile(filename, cmd.Data);               
                 return cmdFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", "none");
             }
+            cmd.Filename = filename;
             return cmdFactory.extractCommandFromStr("{-1;SERVER;7;" + cmd.Filename + ";cant save file;none}");
         }
 

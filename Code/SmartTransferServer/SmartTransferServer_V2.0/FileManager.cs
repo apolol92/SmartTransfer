@@ -22,10 +22,7 @@ namespace SmartTransferServer_V2._0
 
         public void deleteFile(string filename)
         {
-            if (File.Exists(filename))
-            {
-                File.Delete(filename);
-            }
+            System.IO.File.Delete(filename);
         }
 
         public List<string> listAllFilesInCategoryFolders(List<string> allPaths)
