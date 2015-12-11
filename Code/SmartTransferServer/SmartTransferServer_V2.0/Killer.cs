@@ -28,6 +28,11 @@ namespace SmartTransferServer_V2._0
             return false;
         }
 
+        public void hardKill()
+        {
+            this.lastAlive = NOT_BORN;
+        }
+
         public void clientEntreation(Command requestCommand)
         {
             if (requestCommand.Typ == KEEP_ALIVE_TYP)

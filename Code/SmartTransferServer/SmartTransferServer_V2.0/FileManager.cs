@@ -4,9 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
 
-namespace SmartTransferServer
+namespace SmartTransferServer_V2._0
 {
     class FileManager
     {
@@ -14,8 +13,6 @@ namespace SmartTransferServer
         {
             return File.ReadAllBytes(filename).ToString();
         }
-
-        
 
         public void saveFile(string filename, string data)
         {
@@ -25,7 +22,7 @@ namespace SmartTransferServer
 
         public void deleteFile(string filename)
         {
-            if(File.Exists(filename))
+            if (File.Exists(filename))
             {
                 File.Delete(filename);
             }
@@ -34,19 +31,20 @@ namespace SmartTransferServer
         public List<string> listAllFilesInCategoryFolders(List<string> allPaths)
         {
             List<String> allFiles = new List<string>();
-            for(int i = 0; i < allPaths.Count;i++)
+            for (int i = 0; i < allPaths.Count; i++)
             {
-                try {
+                try
+                {
                     foreach (var path in Directory.GetFiles(allPaths[i]))
                     {
                         allFiles.Add(path);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
 
                 }
-                
+
             }
             return allFiles;
         }

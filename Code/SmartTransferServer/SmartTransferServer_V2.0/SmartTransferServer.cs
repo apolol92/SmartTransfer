@@ -9,10 +9,16 @@ namespace SmartTransferServer_V2._0
     public class SmartTransferServer
     {
         public static readonly int SERVER_PORT = 7000;
-        public static readonly string SERVER_PW = "test123";
+        public string SERVER_PW;
         public SmartTransferServer()
         {
+            XmlManager xmlManager = new XmlManager();
+            xmlManager.addChildToCategory(Categories.MUSIC, "C:\\Users\\Dennis\\Music");
+            xmlManager.addChildToCategory(Categories.MUSIC, "C:\\Users\\Dennis\\Pictures");
             //TODO: Initialization
+            xmlManager.addServerPassword("test123");
+            SERVER_PW = xmlManager.readServerPassword();
+            xmlManager.saveXml();
         }
 
         public void run()
@@ -24,7 +30,7 @@ namespace SmartTransferServer_V2._0
             Killer SmartKiller = new Killer();
             SenderAssistant SmartSenderAssistant = new SenderAssistant();
             Authenticator SmartAuthenticator = new Authenticator();
-            Executor SmartExecutor = new Executor();
+            Executor SmartExecutor = new Executor(SmartAuthenticator, SmartKiller);
             Encrypter CmdEncrypter = new Encrypter(SERVER_PW);
             Sender SmartSender = new Sender();
             while(true)
@@ -70,9 +76,7 @@ namespace SmartTransferServer_V2._0
                     else
                     {
                         //SmartSenderAssistant.sendLoginSucceed(CmdReceiver.CurrentClient);
-                        Command loginSucceedResponse = CmdFactory.createLoginSuceedCommand();
-                        SmartAuthenticator.Id = loginSucceedResponse.Id;
-                        SmartAuthenticator.Login = true;
+                        Command loginSucceedResponse = CmdFactory.createLoginSuceedCommand(SmartAuthenticator);                        
                         SmartSender.send(loginSucceedResponse, CmdReceiver.CurrentClient,CmdEncrypter);
                         continue;
                     }                                      

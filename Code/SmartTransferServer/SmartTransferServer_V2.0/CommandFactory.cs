@@ -79,9 +79,9 @@ namespace SmartTransferServer_V2._0
             return nCommand;
         }
 
-        internal Command createLoginSuceedCommand()
+        public Command createLoginSuceedCommand(Authenticator authenticator)
         {
-            throw new NotImplementedException();
+            return extractCommandFromStr("{"+authenticator.generateNewId()+";SERVER;7;none;“Login successed/failed“;none}");
         }
 
         /// <summary>
