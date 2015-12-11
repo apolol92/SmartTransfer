@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SmartTransferServer_V2._0
 {
-    internal class Receiver
+    public class Receiver
     {
         private Socket serverSocket;
         private Socket currentClient;

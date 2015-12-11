@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SmartTransferServer_V2._0
 {
-    internal class SenderAssistant
+    public class SenderAssistant
     {
         const string WRONG_PASSWORD = "wrong password";
         const string WRONG_COMMAND_FORMAT = "wrong command format";

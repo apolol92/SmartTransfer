@@ -56,6 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Authenticator.cs" />
+    <Compile Include="Cleaner.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandFactory.cs" />
     <Compile Include="Decrypter.cs" />

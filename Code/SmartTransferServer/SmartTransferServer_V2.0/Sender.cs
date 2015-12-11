@@ -3,17 +3,17 @@ using System.Net.Sockets;
 
 namespace SmartTransferServer_V2._0
 {
-    internal class Sender
+    public class Sender
     {
         public Sender()
         {
         }
 
 
-        internal void send(Command responseCommand, Socket currentClient)
+        internal void send(Command responseCommand, Socket currentClient, Encrypter mEncrypter)
         {
             SenderAssistant senderAssistent = new SenderAssistant();
-            senderAssistent.sendString(responseCommand.toString(), currentClient);
+            senderAssistent.sendString(mEncrypter.encrypt(responseCommand), currentClient);
         }
     }
 }

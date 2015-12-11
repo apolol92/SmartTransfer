@@ -2,7 +2,7 @@
 
 namespace SmartTransferServer_V2._0
 {
-    internal class Executor
+    public class Executor
     {
         public Executor()
         {

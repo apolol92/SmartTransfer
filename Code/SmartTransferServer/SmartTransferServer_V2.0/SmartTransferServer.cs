@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace SmartTransferServer_V2._0
 {
-    class SmartTransferServer
+    public class SmartTransferServer
     {
         public static readonly int SERVER_PORT = 7000;
+        public static readonly string SERVER_PW = "test123";
         public SmartTransferServer()
         {
             //TODO: Initialization
@@ -16,21 +17,23 @@ namespace SmartTransferServer_V2._0
 
         public void run()
         {
-            
+            Cleaner SmartCleaner = new Cleaner();
             Receiver CmdReceiver = new Receiver();
-            Decrypter CmdDecrypter = new Decrypter();
+            Decrypter CmdDecrypter = new Decrypter(SERVER_PW);
             CommandFactory CmdFactory = new CommandFactory();
             Killer SmartKiller = new Killer();
             SenderAssistant SmartSenderAssistant = new SenderAssistant();
             Authenticator SmartAuthenticator = new Authenticator();
             Executor SmartExecutor = new Executor();
-            Encrypter CmdEncrypter = new Encrypter();
+            Encrypter CmdEncrypter = new Encrypter(SERVER_PW);
             Sender SmartSender = new Sender();
             while(true)
-            {             
-                //TODO REAL: Receive an encrypted RequestCommandStr
+            {
+                //Clean following things before next round..
+                SmartCleaner.clean(CmdReceiver.CurrentClient);
+                //Receive an encrypted RequestCommandStr
                 String encryptedRequestComandStr = CmdReceiver.waitForRequestCommand();
-                //TODO: Decrypt the encrypted RequestCommandStr
+                //Decrypt the encrypted RequestCommandStr
                 String decryptedRequestComandStr = CmdDecrypter.decrypt(encryptedRequestComandStr);
                 //If the encrypted RequestCommandStr has got a wrong encryption..
                 if(decryptedRequestComandStr== Decrypter.WRONG_PASSWORD)
@@ -70,7 +73,7 @@ namespace SmartTransferServer_V2._0
                         Command loginSucceedResponse = CmdFactory.createLoginSuceedCommand();
                         SmartAuthenticator.Id = loginSucceedResponse.Id;
                         SmartAuthenticator.Login = true;
-                        SmartSender.send(loginSucceedResponse, CmdReceiver.CurrentClient);
+                        SmartSender.send(loginSucceedResponse, CmdReceiver.CurrentClient,CmdEncrypter);
                         continue;
                     }                                      
                 }
@@ -82,10 +85,8 @@ namespace SmartTransferServer_V2._0
                 }
                 //All was allright.. now execute command
                 Command responseCommand = SmartExecutor.execute(requestCommand);
-                //TODO: Encrypt responseCommand
-                responseCommand = CmdEncrypter.encrypt(responseCommand);
-                //Send responseCommand to client
-                SmartSender.send(responseCommand,CmdReceiver.CurrentClient);
+                //Encrypt and send responseCommand to client
+                SmartSender.send(responseCommand,CmdReceiver.CurrentClient, CmdEncrypter);
             }
         }
     }

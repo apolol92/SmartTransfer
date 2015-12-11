@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartTransferServer_V2._0
 {
-    class CommandFactory
+    public class CommandFactory
     {
         const int COMMAND_PARTS = 6;
 
@@ -28,51 +28,54 @@ namespace SmartTransferServer_V2._0
             char[] splitsCharacters = new char[] { ';', '{', '}' };
             Command nCommand = new Command();
             String[] commandParts = strCommand.Split(splitsCharacters);
-            if (commandParts == null || commandParts.Length < COMMAND_PARTS || commandParts.Length > COMMAND_PARTS)
+            if (commandParts == null)
             {
                 return null;
             }
-            try
+
+            for (int i = 0; i < commandParts.Length; i++)
             {
-                for (int i = 0; i < commandParts.Length; i++)
+                try
                 {
                     switch (i)
                     {
                         case 0:
                             //ID
-                            nCommand.Id = Int32.Parse(commandParts[i].Substring(1, commandParts.Length));
+                            nCommand.Id = Int32.Parse(commandParts[i + 1]);
                             break;
                         case 1:
                             //USERNAME
-                            nCommand.Username = commandParts[i];
+                            nCommand.Username = commandParts[i + 1];
                             nCommand.Username = unmarkSpecialCharacters(nCommand.Username);
                             break;
                         case 2:
                             //TYP
-                            nCommand.Typ = Int32.Parse(commandParts[i]);
+                            nCommand.Typ = Int32.Parse(commandParts[i + 1]);
                             break;
                         case 3:
                             //FILENAME
-                            nCommand.Filename = commandParts[i];
+                            nCommand.Filename = commandParts[i + 1];
                             nCommand.Filename = unmarkSpecialCharacters(nCommand.Filename);
                             break;
                         case 4:
                             //PARAMETER
-                            nCommand.Parameter = commandParts[i];
+                            nCommand.Parameter = commandParts[i + 1];
                             nCommand.Parameter = unmarkSpecialCharacters(nCommand.Parameter);
                             break;
                         case 5:
                             //DATA
-                            nCommand.Data = commandParts[i].Substring(0, commandParts.Length - 1);
+                            nCommand.Data = commandParts[i + 1];
                             nCommand.Data = unmarkSpecialCharacters(nCommand.Data);
                             break;
                     }
                 }
+                catch (Exception ex)
+                {
+                    return null;
+                }
             }
-            catch (Exception ex)
-            {
-                return null;
-            }
+
+
             return nCommand;
         }
 

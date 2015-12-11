@@ -2,29 +2,29 @@
 
 namespace SmartTransferServer_V2._0
 {
-    internal class Authenticator
+    public class Authenticator
     {
         const int LOGIN_TYP = 9;
 
-        public bool Login { get; internal set; }
-        public int Id { get; internal set; }
+        public bool Login { get; set; }
+        public int Id { get; set; }
 
-        internal bool isNoLoginCommand(Command requestCommand)
+        public bool isNoLoginCommand(Command requestCommand)
         {
             return requestCommand.Typ != LOGIN_TYP;
         }
 
-        internal bool isLogin()
+        public bool isLogin()
         {
             return Login;
         }
 
-        internal bool isCorrectId(Command requestCommand)
+        public bool isCorrectId(Command requestCommand)
         {
             return requestCommand.Id == Id;
         }
 
-        internal bool isNoLoginCommand()
+        public bool isNoLoginCommand()
         {
             throw new NotImplementedException();
         }
