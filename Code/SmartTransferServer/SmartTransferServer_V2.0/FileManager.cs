@@ -11,7 +11,7 @@ namespace SmartTransferServer_V2._0
     {
         public string loadFile(string category, string filename)
         {
-            return File.ReadAllBytes(filename).ToString();
+            return System.Text.Encoding.UTF8.GetString(File.ReadAllBytes(filename));
         }
 
         public void saveFile(string filename, string data)

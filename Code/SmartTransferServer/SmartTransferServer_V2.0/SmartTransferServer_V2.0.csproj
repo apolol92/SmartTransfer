@@ -81,6 +81,7 @@
     <Compile Include="Executor.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="Killer.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Receiver.cs" />
     <Compile Include="Security.cs" />
     <Compile Include="Sender.cs" />

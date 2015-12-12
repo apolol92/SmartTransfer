@@ -22,11 +22,13 @@ namespace SmartTransferServer_V2._0
         const int SEND_CLIENT_THUMBNAIL = 11;
         Authenticator SmartAuthenticator;
         Killer SmartKiller;
+        Logger SmartLogger;
 
-        public Executor(Authenticator SmartAuthenticator, Killer SmartKiller)
+        public Executor(Authenticator SmartAuthenticator, Killer SmartKiller, Logger SmartLogger)
         {
             this.SmartAuthenticator = SmartAuthenticator;
             this.SmartKiller = SmartKiller;
+            this.SmartLogger = SmartLogger;
         }
 
 
@@ -36,27 +38,35 @@ namespace SmartTransferServer_V2._0
             switch (cmd.Typ)
             {
                 case GET_DATA_FROM_SERVER:
+                    this.SmartLogger.getDataFromServer();
                     responseCommand =  getDataFromServer(cmd);
                     break;
                 case SAVE_DATA_ON_SERVER:
+                    this.SmartLogger.saveDataOnServer(cmd);
                     responseCommand = saveDataOnServer(cmd);
                     break;
                 case DELETE_FILE_FROM_SERVER:
+                    this.SmartLogger.deleteFileFromServer(cmd);
                     responseCommand = deleteFileFromServer(cmd);
                     break;             
                 case GET_AVAIBLE_FILES:
+                    this.SmartLogger.getAvaibleFiles();
                     responseCommand = getAvaibleFiles(cmd);
                     break;
                 case CLIENT_LOGOUT:
+                    this.SmartLogger.userLoggedOut();
                     return logout();
                 case CLIENT_WANT_THUMBNAIL:
+                    this.SmartLogger.clientWantThumbnail(cmd);
                     responseCommand = thumbnail(cmd);
                     break;
                 default:
+                    this.SmartLogger.undefinedError();
                     return createErrorCommand();
                     
             }
             responseCommand.Id = SmartAuthenticator.generateNewId();
+            this.SmartLogger.generatedNewId();
             return responseCommand;
         }
 
