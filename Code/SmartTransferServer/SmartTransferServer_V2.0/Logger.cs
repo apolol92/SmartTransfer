@@ -14,7 +14,16 @@ namespace SmartTransferServer_V2._0
 
         public Logger()
         {
-            this.streamWriter = new StreamWriter(@LOG_PATH);
+            if(File.Exists(LOG_PATH))
+            {
+                System.IO.File.Delete(LOG_PATH);
+            }
+            this.streamWriter = new StreamWriter(LOG_PATH);
+        }
+
+        public void close()
+        {
+            this.streamWriter.Close();
         }
         public void getReady()
         {

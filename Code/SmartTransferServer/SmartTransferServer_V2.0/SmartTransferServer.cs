@@ -10,6 +10,7 @@ namespace SmartTransferServer_V2._0
     {
         public static readonly int SERVER_PORT = 7000;
         public string SERVER_PW;
+
         public SmartTransferServer()
         {
             XmlManager xmlManager = new XmlManager();
