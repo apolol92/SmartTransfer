@@ -11,7 +11,13 @@ namespace SmartTransferServer_V2._0
 
         internal void clean(Socket currentClient)
         {
-            currentClient.Close();
+            try {
+                currentClient.Close();
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
     }
 }

@@ -14,12 +14,8 @@ namespace SmartTransferServer_V2._0
         public SmartTransferServer()
         {
             XmlManager xmlManager = new XmlManager();
-            xmlManager.addChildToCategory(Categories.MUSIC, "C:\\Users\\Dennis\\Music");
-            xmlManager.addChildToCategory(Categories.MUSIC, "C:\\Users\\Dennis\\Pictures");
-            //TODO: Initialization
-            xmlManager.addServerPassword("test123");
             SERVER_PW = xmlManager.readServerPassword();
-            xmlManager.saveXml();
+            
         }
 
         public void run()
@@ -41,7 +37,7 @@ namespace SmartTransferServer_V2._0
                 SmartCleaner.clean(CmdReceiver.CurrentClient);
                 SmartLogger.getReady();
                 //Receive an encrypted RequestCommandStr
-                String encryptedRequestComandStr = CmdReceiver.waitForRequestCommand();
+                String encryptedRequestComandStr = CmdReceiver.waitForCommand();
                 SmartLogger.incomingCommand();
                 //Decrypt the encrypted RequestCommandStr
                 String decryptedRequestComandStr = CmdDecrypter.decrypt(encryptedRequestComandStr);

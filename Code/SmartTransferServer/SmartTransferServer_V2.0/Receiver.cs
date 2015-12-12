@@ -48,7 +48,7 @@ namespace SmartTransferServer_V2._0
 
         internal string waitForCommand()
         {
-            this.currentClient.Accept();
+            this.currentClient = this.ServerSocket.Accept();
             return receiveData();
         }
 
@@ -73,9 +73,6 @@ namespace SmartTransferServer_V2._0
             return receivedData;
         }
 
-        internal string waitForRequestCommand()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

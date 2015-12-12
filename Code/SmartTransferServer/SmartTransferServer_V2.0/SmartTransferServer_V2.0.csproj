@@ -73,6 +73,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Authenticator.cs" />
+    <Compile Include="BroadcastSender.cs" />
     <Compile Include="Cleaner.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandFactory.cs" />
