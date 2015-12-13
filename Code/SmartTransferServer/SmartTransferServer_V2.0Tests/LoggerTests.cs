@@ -19,8 +19,7 @@ namespace SmartTransferServer_V2._0.Tests
             logger.getAvaibleFiles();
             logger.getAvaibleFiles();
             logger.getAvaibleFiles();
-            logger.getAvaibleFiles();
-            
+            logger.getAvaibleFiles();    
            
 
 
