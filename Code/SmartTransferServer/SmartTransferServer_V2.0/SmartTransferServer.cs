@@ -18,6 +18,19 @@ namespace SmartTransferServer_V2._0
             
         }
 
+        private string readPassword()
+        {
+            try
+            {
+                XmlManager xmlManager = new XmlManager();
+                return xmlManager.readServerPassword();
+            }
+            catch (Exception ex)
+            {
+                return SERVER_PW;
+            }            
+        }
+
         public void run()
         {
             Logger SmartLogger = new Logger();
@@ -33,6 +46,8 @@ namespace SmartTransferServer_V2._0
             Sender SmartSender = new Sender();
             while(true)
             {
+                //Read password everytime.. if changing..
+                this.SERVER_PW = readPassword();
                 //Clean following things before next round..
                 SmartCleaner.clean(CmdReceiver.CurrentClient);
                 SmartLogger.getReady();

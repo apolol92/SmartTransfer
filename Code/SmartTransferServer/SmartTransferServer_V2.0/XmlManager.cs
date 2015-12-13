@@ -151,7 +151,9 @@ namespace SmartTransferServer_V2._0
 
         public void deleteXml()
         {
+            
             System.IO.File.Delete(CONFIG_PATH);
+            
         }
        
 

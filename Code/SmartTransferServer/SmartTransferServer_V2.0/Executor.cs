@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 
 namespace SmartTransferServer_V2._0
 {
@@ -109,7 +110,30 @@ namespace SmartTransferServer_V2._0
             XmlManager xmlManager = new XmlManager();
             FileManager fileManager = new FileManager();
             List<string> allFilePaths = fileManager.listAllFilesInCategoryFolders(xmlManager.getAllChilds());
+            allFilePaths = sortFilesByCreationTime(allFilePaths);
             return cmdFactory.createCommand(cmd.Id, SERVERNAME, SEND_AVAIBLE_FILES, "none", concatFiles(allFilePaths), "none");
+        }
+
+        private List<string> sortFilesByCreationTime(List<string> files)
+        {
+            for (int i = 0; i < files.Count- 1; i++)
+            {
+                int j = i + 1;
+
+                while (j > 0)
+                {
+                    long tsFilesj_1 = GetCurrentUnixTimestampMillis(File.GetCreationTime(files[j - 1]));
+                    long tsFilej = GetCurrentUnixTimestampMillis(File.GetCreationTime(files[j]));
+                    if (tsFilesj_1>tsFilej)
+                    {
+                        string temp = files[j - 1];
+                        files[j - 1] = files[j];
+                        files[j] = temp;
+                    }                   
+                    j--;
+                }
+            }
+            return files;
         }
 
         private Command deleteFileFromServer(Command cmd)
@@ -165,6 +189,11 @@ namespace SmartTransferServer_V2._0
             //Remove last concatting '+'
             files = files.Substring(0, files.Length - 1);
             return files;
+        }
+        public long GetCurrentUnixTimestampMillis(DateTime current)
+        {
+            DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return (long)(current - UnixEpoch).TotalMilliseconds;
         }
     }
 }

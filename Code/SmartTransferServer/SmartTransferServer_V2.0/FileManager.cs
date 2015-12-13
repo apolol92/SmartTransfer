@@ -28,22 +28,22 @@ namespace SmartTransferServer_V2._0
         public List<string> listAllFilesInCategoryFolders(List<string> allPaths)
         {
             List<String> allFiles = new List<string>();
+            // Get list of files in the specific directory.
+            // ... Please change the first argument.
             for (int i = 0; i < allPaths.Count; i++)
             {
-                try
-                {
-                    foreach (var path in Directory.GetFiles(allPaths[i]))
-                    {
-                        allFiles.Add(path);
-                    }
-                }
-                catch (Exception ex)
-                {
+                string[] files = Directory.GetFiles(allPaths[i],
+                    "*.*",
+                    SearchOption.AllDirectories);
 
+                // Display all the files.
+                foreach (string file in files)
+                {
+                    allFiles.Add(file);
                 }
-
             }
             return allFiles;
         }
+
     }
 }
