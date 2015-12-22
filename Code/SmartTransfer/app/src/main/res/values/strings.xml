@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SmartTransfer</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_server_selection">ServerSelectionActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_file_info">FileInfoActivity</string>
+</resources>

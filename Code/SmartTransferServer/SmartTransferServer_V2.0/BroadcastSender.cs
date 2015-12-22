@@ -18,7 +18,7 @@ namespace SmartTransferServer_V2._0
             /// <summary>
             /// We will send this message
             /// </summary>
-            public const string I_AM_HERE = "SmartTransferServer\n";
+            public const string I_AM_HERE = "SmartTransferServer";
             /// <summary>
             /// This his the UdpClient, which is used for sending
             /// </summary>
@@ -60,7 +60,7 @@ namespace SmartTransferServer_V2._0
             {
                 this.client = new UdpClient();
                 this.ip = new IPEndPoint(IPAddress.Parse("255.255.255.255"), PORT_NUMBER);
-                this.bytes = Encoding.ASCII.GetBytes(I_AM_HERE);
+                this.bytes = Encoding.UTF8.GetBytes(I_AM_HERE);
                 this.Active = true;
                 this.n_secs = n_secs;
                 this.n_secs = 1;
