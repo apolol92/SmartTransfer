@@ -11,7 +11,7 @@ namespace SmartTransferServer_V2._0.Tests
     [TestClass()]
     public class SmartTransferServerTests
     {
-        public string SERVER_PW = "test123";
+        public string SERVER_PW = "test123456789";
         public string cmdStr = "{42;Hans;10;abc;none;none}";
         public string wrongCmdStr = "{42;10;abc;none;none}";
 
@@ -39,7 +39,7 @@ namespace SmartTransferServer_V2._0.Tests
             Encrypter encrypter = new Encrypter(SERVER_PW);
             string encryptedStr = encrypter.encrypt(cmd);
             Decrypter decrypter = new Decrypter(SERVER_PW);
-            string decryptedStr = decrypter.decrypt(encryptedStr);         
+            string decryptedStr = decrypter.decrypt(Encoding.Default.GetBytes(encryptedStr));         
             Assert.AreEqual(cmdStr, decryptedStr);
         }
 
@@ -48,10 +48,10 @@ namespace SmartTransferServer_V2._0.Tests
         {
             CommandFactory cmdFactory = new CommandFactory();
             Command cmd = cmdFactory.extractCommandFromStr(cmdStr);
-            Encrypter encrypter = new Encrypter("lol");
+            Encrypter encrypter = new Encrypter("lol1231254125");
             string encryptedStr = encrypter.encrypt(cmd);
             Decrypter decrypter = new Decrypter(SERVER_PW);
-            string decryptedStr = decrypter.decrypt(encryptedStr);
+            string decryptedStr = decrypter.decrypt(Encoding.Default.GetBytes(encryptedStr));
             Assert.AreEqual(Decrypter.WRONG_PASSWORD, decryptedStr);
         }
         [TestMethod()]

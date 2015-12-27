@@ -18,7 +18,7 @@ namespace SmartTransferServer_V2._0
             string clearText = SERVER_PW + responseCommand.toString();
             RijndaelManaged rijManaged = GetRijndaelManaged(SERVER_PW);
             byte[] clearBytes = Encrypt(Encoding.Default.GetBytes(clearText), rijManaged);
-            return clearText;
+            return Encoding.Default.GetString(clearBytes);
         }
         public static RijndaelManaged GetRijndaelManaged(String secretKey)
         {
