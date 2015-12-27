@@ -28,7 +28,7 @@ namespace SmartTransferServer_V2._0
             xmlManager.addChildToCategory(Categories.MUSIC, "C:\\Users\\Dennis\\Music");
             xmlManager.addChildToCategory(Categories.MUSIC, "C:\\Users\\Dennis\\Pictures");
             //TODO: Initialization
-            xmlManager.addServerPassword("test123456789");
+            xmlManager.addServerPassword("test123456789123");
             xmlManager.saveXml();
             BroadcastSender mBroadcastSender = new BroadcastSender(1);
             Thread BcSender = new Thread(mBroadcastSender.run);

@@ -19,6 +19,10 @@ namespace SmartTransferServer_V2._0
 
         public bool kill(Command requestCommand)
         {
+            if(requestCommand.Id==NOT_BORN)
+            {
+                return false;
+            }
             long currentTime = GetCurrentUnixTimestampMillis();
             if (Math.Abs(currentTime - this.LastAlive) > LIVING_TIME)
             {

@@ -39,35 +39,35 @@ namespace SmartTransferServer_V2._0
             switch (cmd.Typ)
             {
                 case GET_DATA_FROM_SERVER:
-                    this.SmartLogger.getDataFromServer();
+                    Logger.getDataFromServer();
                     responseCommand =  getDataFromServer(cmd);
                     break;
                 case SAVE_DATA_ON_SERVER:
-                    this.SmartLogger.saveDataOnServer(cmd);
+                    Logger.saveDataOnServer(cmd);
                     responseCommand = saveDataOnServer(cmd);
                     break;
                 case DELETE_FILE_FROM_SERVER:
-                    this.SmartLogger.deleteFileFromServer(cmd);
+                    Logger.deleteFileFromServer(cmd);
                     responseCommand = deleteFileFromServer(cmd);
                     break;             
                 case GET_AVAIBLE_FILES:
-                    this.SmartLogger.getAvaibleFiles();
+                    Logger.getAvaibleFiles();
                     responseCommand = getAvaibleFiles(cmd);
                     break;
                 case CLIENT_LOGOUT:
-                    this.SmartLogger.userLoggedOut();
+                    Logger.userLoggedOut();
                     return logout();
                 case CLIENT_WANT_THUMBNAIL:
-                    this.SmartLogger.clientWantThumbnail(cmd);
+                    Logger.clientWantThumbnail(cmd);
                     responseCommand = thumbnail(cmd);
                     break;
                 default:
-                    this.SmartLogger.undefinedError();
+                    Logger.undefinedError();
                     return createErrorCommand();
                     
             }
             responseCommand.Id = SmartAuthenticator.generateNewId();
-            this.SmartLogger.generatedNewId();
+            Logger.generatedNewId();
             return responseCommand;
         }
 

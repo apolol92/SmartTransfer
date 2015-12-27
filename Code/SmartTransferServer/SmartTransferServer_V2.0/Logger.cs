@@ -10,7 +10,7 @@ namespace SmartTransferServer_V2._0
     public class Logger
     {
         public static readonly string LOG_PATH = "eventlog.txt";
-        StreamWriter streamWriter;
+        public static StreamWriter streamWriter;
 
         public Logger()
         {
@@ -21,164 +21,180 @@ namespace SmartTransferServer_V2._0
            
         }
 
-        public void getReady()
+        public static void incomingCommand(string command)
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis()+":"+"new round:get ready",true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "new round:get ready", true);
+            streamWriter.Close();
         }
 
-        public void incomingCommand()
+        internal static void writeIncomingString(string encryptedRequestStr)
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "new command:a new command received", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + encryptedRequestStr, true);
+            streamWriter.Close();
         }
 
-        public void correctPassword()
+        public static void getReady()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "correct password:the password was correct", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis()+":"+"new round:get ready",true);
+            streamWriter.Close();
         }
 
-        public void wrongPassword()
+        public static void incomingCommand()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "wrong password:the password was incorrect", true);           
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "new command:a new command received", true);
+            streamWriter.Close();
         }
 
-        public void wrongCmdFormat(string cmd)
+        public static void correctPassword()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "wrong command format:the command format was wrong", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "correct password:the password was correct", true);
+            streamWriter.Close();
         }
 
-        public void correctCmdFormat()
+        public static void wrongPassword(string decryptedRequestCommandStr)
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "correct command format:the command format was correct", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "wrong password:the password was incorrect " + decryptedRequestCommandStr, true);           
+            streamWriter.Close();
         }
 
-        public void userKilled()
+        public static void wrongCmdFormat(string cmd)
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "user got killed:the user was too old", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "wrong command format:the command format was wrong", true);
+            streamWriter.Close();
         }
 
-        public void noActiveUser()
+        public static void correctCmdFormat()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "no active user:till now there is no active user", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "correct command format:the command format was correct", true);
+            streamWriter.Close();
         }
 
-        public void killerForgiven()
+        public static void userKilled()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "forgived user:the user survived", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "user got killed:the user was too old", true);
+            streamWriter.Close();
         }
 
-        public void isNoLoginCommand()
+        public static void noActiveUser()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "no login command:there was no login command", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "no active user:till now there is no active user", true);
+            streamWriter.Close();
         }
 
-        public void getDataFromServer()
+        public static void killerForgiven()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "get data:get data from server", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "forgived user:the user survived", true);
+            streamWriter.Close();
         }
 
-        public void loginSucceed()
+        public static void isNoLoginCommand()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "login:user logged in", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "no login command:there was no login command", true);
+            streamWriter.Close();
         }
 
-        public void saveDataOnServer(Command cmd)
+        public static void getDataFromServer()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "saved data:saved "+cmd.Filename+" on server", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "get data:get data from server", true);
+            streamWriter.Close();
         }
 
-        public void wrongId()
+        public static void loginSucceed(int id)
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "wrong id:user has got the wrong id", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "login:user logged in " + id, true);
+            streamWriter.Close();
         }
 
-        public void deleteFileFromServer(Command cmd)
+        public static void saveDataOnServer(Command cmd)
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "deleted file:deleted "+cmd.Filename+" from server", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "saved data:saved "+cmd.Filename+" on server", true);
+            streamWriter.Close();
         }
 
-        public void getAvaibleFiles()
+     
+
+        public static void wrongId()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "get avaible files:get all avaible files from server as list of filenames", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "wrong id:user has got the wrong id", true);
+            streamWriter.Close();
         }
 
-        public void correctId()
+        public static void deleteFileFromServer(Command cmd)
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "correct id:the user has got the id", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "deleted file:deleted "+cmd.Filename+" from server", true);
+            streamWriter.Close();
         }
 
-        public void userLoggedOut()
+        public static void getAvaibleFiles()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "user logged out:user now logged out", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "get avaible files:get all avaible files from server as list of filenames", true);
+            streamWriter.Close();
         }
 
-        public void clientWantThumbnail(Command cmd)
+        public static void correctId(int id)
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "download thumbnail:user want to have the thumbnail from "+cmd.Filename, true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "correct id:the user has got the id " + id, true);
+            streamWriter.Close();
         }
 
-        public void undefinedError()
+        public static void userLoggedOut()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "error:undefined error", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "user logged out:user now logged out", true);
+            streamWriter.Close();
         }
 
-        public void generatedNewId()
+        public static void clientWantThumbnail(Command cmd)
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "new id:new id generated", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "download thumbnail:user want to have the thumbnail from "+cmd.Filename, true);
+            streamWriter.Close();
         }
 
-        public long GetCurrentUnixTimestampMillis()
+        public static void undefinedError()
+        {
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "error:undefined error", true);
+            streamWriter.Close();
+        }
+
+        public static void generatedNewId()
+        {
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "new id:new id generated", true);
+            streamWriter.Close();
+        }
+
+        public static long GetCurrentUnixTimestampMillis()
         {
             DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return (long)(DateTime.UtcNow - UnixEpoch).TotalMilliseconds;
         }
 
-        public void finishedCommand()
+        public static void finishedCommand()
         {
-            this.streamWriter = File.AppendText(LOG_PATH);
-            this.streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "finished command:all is done", true);
-            this.streamWriter.Close();
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "finished command:all is done", true);
+            streamWriter.Close();
         }
     }
 }

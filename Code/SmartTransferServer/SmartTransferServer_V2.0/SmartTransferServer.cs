@@ -15,6 +15,7 @@ namespace SmartTransferServer_V2._0
         {
             XmlManager xmlManager = new XmlManager();
             SERVER_PW = xmlManager.readServerPassword();
+            xmlManager.deleteXml();
             
         }
 
@@ -50,57 +51,57 @@ namespace SmartTransferServer_V2._0
                 this.SERVER_PW = readPassword();
                 //Clean following things before next round..
                 SmartCleaner.clean(CmdReceiver.CurrentClient);
-                SmartLogger.getReady();
+                Logger.getReady();
                 //Receive an encrypted RequestCommandStr
                 byte[] encryptedRequestComand = CmdReceiver.waitForCommand();
-                SmartLogger.incomingCommand();
+                Logger.incomingCommand();
                 //Decrypt the encrypted RequestCommandStr
                 String decryptedRequestComandStr = CmdDecrypter.decrypt(encryptedRequestComand);
                 //If the encrypted RequestCommandStr has got a wrong encryption..
                 if(decryptedRequestComandStr== Decrypter.WRONG_PASSWORD)
                 {
-                    SmartLogger.wrongPassword();
+                    Logger.wrongPassword(decryptedRequestComandStr);
                     SmartSenderAssistant.sendWrongPassword(CmdReceiver.CurrentClient);
                     continue;
                 }
-                SmartLogger.correctPassword();
+                Logger.correctPassword();
                 //Extract RequestCommandStr as Command-Instance
                 Command requestCommand = CmdFactory.extractCommandFromStr(decryptedRequestComandStr);
                 //If requestCommandStr has got the wrong format..
                 if(requestCommand== null)
                 {
-                    SmartLogger.wrongCmdFormat(decryptedRequestComandStr);
+                    Logger.wrongCmdFormat(decryptedRequestComandStr);
                     SmartSenderAssistant.sendWrongCommandFormat(CmdReceiver.CurrentClient);
                     continue;
                 }
-                SmartLogger.correctCmdFormat();
+                Logger.correctCmdFormat();
                 SmartKiller.clientEntreation(requestCommand);
                 //If userid too old..
                 if(SmartKiller.kill(requestCommand))
                 {
-                    SmartLogger.userKilled();
+                    Logger.userKilled();
                     SmartSenderAssistant.sendObituary(CmdReceiver.CurrentClient);
                     SmartAuthenticator.Login = false;
                     continue;
                 }
-                SmartLogger.killerForgiven();
+                Logger.killerForgiven();
                 //If there wasn't any login before..
                 if(!SmartAuthenticator.isLogin())
                 {
-                    SmartLogger.noActiveUser();
+                    Logger.noActiveUser();
                     //Client don't want to connect.. FUCK CLIENT!!
                     if (SmartAuthenticator.isNoLoginCommand(requestCommand))
                     {
-                        SmartLogger.isNoLoginCommand();
+                        Logger.isNoLoginCommand();
                         SmartSenderAssistant.sendLoginRequired(CmdReceiver.CurrentClient);
                         continue;
                     }
                     //Client want to connect! .. let him.. PW checked before..
                     else
-                    {
-                        SmartLogger.loginSucceed();
+                    {                        
                         //SmartSenderAssistant.sendLoginSucceed(CmdReceiver.CurrentClient);
-                        Command loginSucceedResponse = CmdFactory.createLoginSuceedCommand(SmartAuthenticator);                        
+                        Command loginSucceedResponse = CmdFactory.createLoginSuceedCommand(SmartAuthenticator);
+                        Logger.loginSucceed(SmartAuthenticator.Id);
                         SmartSender.send(loginSucceedResponse, CmdReceiver.CurrentClient,CmdEncrypter);
                         continue;
                     }                                      
@@ -108,16 +109,16 @@ namespace SmartTransferServer_V2._0
                 //If there was a login.. Check if the user has got the correct Session-ID.. if not do this if
                 if (SmartAuthenticator.isCorrectId(requestCommand)==false)
                 {
-                    SmartLogger.wrongId();
+                    Logger.wrongId();
                     SmartSenderAssistant.sendWrongId(CmdReceiver.CurrentClient);
                     continue;
                 }
-                SmartLogger.correctId();
+                Logger.correctId(requestCommand.Id);
                 //All was allright.. now execute command
                 Command responseCommand = SmartExecutor.execute(requestCommand);
                 //Encrypt and send responseCommand to client
                 SmartSender.send(responseCommand,CmdReceiver.CurrentClient, CmdEncrypter);
-                SmartLogger.finishedCommand();
+                Logger.finishedCommand();
             }
         }
     }

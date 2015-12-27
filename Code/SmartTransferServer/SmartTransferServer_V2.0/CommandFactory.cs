@@ -81,7 +81,7 @@ namespace SmartTransferServer_V2._0
 
         public Command createLoginSuceedCommand(Authenticator authenticator)
         {
-            return extractCommandFromStr("{"+authenticator.generateNewId()+";SERVER;7;none;“Login successed/failed“;none}");
+            return extractCommandFromStr("{"+authenticator.generateNewId()+";SERVER;7;none;Login successed;none}");
         }
 
         /// <summary>

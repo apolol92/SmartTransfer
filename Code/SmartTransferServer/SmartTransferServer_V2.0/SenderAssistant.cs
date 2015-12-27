@@ -19,7 +19,7 @@ namespace SmartTransferServer_V2._0
 
         public void sendString(string str, Socket client)
         {
-            byte[] data = Encoding.ASCII.GetBytes(str);
+            byte[] data = Encoding.Default.GetBytes(str);
             client.Send(data, data.Length, SocketFlags.None);
         }
 

@@ -13,13 +13,12 @@ namespace SmartTransferServer_V2._0.Tests
     {
         [TestMethod()]
         public void testGetAvaibleFiles()
-        {
-            Logger logger = new Logger();
-            logger.getAvaibleFiles();
-            logger.getAvaibleFiles();
-            logger.getAvaibleFiles();
-            logger.getAvaibleFiles();
-            logger.getAvaibleFiles();    
+        {        
+            Logger.getAvaibleFiles();
+            Logger.getAvaibleFiles();
+            Logger.getAvaibleFiles();
+            Logger.getAvaibleFiles();
+            Logger.getAvaibleFiles();    
            
 
 
