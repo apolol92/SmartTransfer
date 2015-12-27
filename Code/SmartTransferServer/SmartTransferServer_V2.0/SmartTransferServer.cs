@@ -33,8 +33,7 @@ namespace SmartTransferServer_V2._0
         }
 
         public void run()
-        {
-            Logger SmartLogger = new Logger();
+        {            
             Cleaner SmartCleaner = new Cleaner();
             Receiver CmdReceiver = new Receiver();
             Decrypter CmdDecrypter = new Decrypter(SERVER_PW);
@@ -42,7 +41,7 @@ namespace SmartTransferServer_V2._0
             Killer SmartKiller = new Killer();
             SenderAssistant SmartSenderAssistant = new SenderAssistant();
             Authenticator SmartAuthenticator = new Authenticator();
-            Executor SmartExecutor = new Executor(SmartAuthenticator, SmartKiller, SmartLogger);
+            Executor SmartExecutor = new Executor(SmartAuthenticator, SmartKiller);
             Encrypter CmdEncrypter = new Encrypter(SERVER_PW);
             Sender SmartSender = new Sender();
             while(true)

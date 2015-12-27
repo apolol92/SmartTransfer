@@ -77,6 +77,7 @@
     <Compile Include="Cleaner.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandFactory.cs" />
+    <Compile Include="Crypto.cs" />
     <Compile Include="Decrypter.cs" />
     <Compile Include="Encrypter.cs" />
     <Compile Include="Executor.cs" />

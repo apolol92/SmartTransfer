@@ -28,12 +28,6 @@ namespace SmartTransferServer_V2._0
             streamWriter.Close();
         }
 
-        internal static void writeIncomingString(string encryptedRequestStr)
-        {
-            streamWriter = File.AppendText(LOG_PATH);
-            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + encryptedRequestStr, true);
-            streamWriter.Close();
-        }
 
         public static void getReady()
         {

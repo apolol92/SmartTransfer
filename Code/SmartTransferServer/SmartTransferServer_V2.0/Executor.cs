@@ -23,13 +23,11 @@ namespace SmartTransferServer_V2._0
         const int SEND_CLIENT_THUMBNAIL = 11;
         Authenticator SmartAuthenticator;
         Killer SmartKiller;
-        Logger SmartLogger;
 
-        public Executor(Authenticator SmartAuthenticator, Killer SmartKiller, Logger SmartLogger)
+        public Executor(Authenticator SmartAuthenticator, Killer SmartKiller)
         {
             this.SmartAuthenticator = SmartAuthenticator;
             this.SmartKiller = SmartKiller;
-            this.SmartLogger = SmartLogger;
         }
 
 

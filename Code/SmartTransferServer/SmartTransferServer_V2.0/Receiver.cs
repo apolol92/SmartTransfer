@@ -64,6 +64,7 @@ namespace SmartTransferServer_V2._0
             List<Byte[]> incoming = new List<Byte[]>();
             data = new byte[1024];
             bool stop = false;
+            //Receive all data
             while (!stop)
             {
                 recv = currentClient.Receive(data, 20, SocketFlags.None);
@@ -73,17 +74,16 @@ namespace SmartTransferServer_V2._0
                 {
                     data2[i] = data[i];
                 }
-                incoming.Add(data2);
-
-                Console.WriteLine(recv);
+                incoming.Add(data2);              
                 data = new byte[1024];
                 if (recv < 20)
                 {
                     stop = true;
                 }
             }
+            //Create total data array
             byte[] total_data = new byte[total_recv];
-
+            //Add all bytes from incoming list to total_data
             int pos = 0;
             for (int i = 0; i < incoming.Count; i++)
             {
@@ -94,6 +94,7 @@ namespace SmartTransferServer_V2._0
                     pos++;
                 }
             }          
+            //Return total received data as byte array
             return total_data;
         }
 

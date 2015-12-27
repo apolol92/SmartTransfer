@@ -24,10 +24,9 @@ namespace SmartTransferServer_V2._0.Tests
             Killer mKiller = new Killer();
             Authenticator mAuthenticator = new Authenticator();            
             CommandFactory cmdFactory = new  CommandFactory();
-            Logger SmartLogger = new Logger();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{-1;Hans;4;none;none;none}");
-            Executor mExecutor = new Executor(mAuthenticator,mKiller, SmartLogger);
+            Executor mExecutor = new Executor(mAuthenticator,mKiller);
             cmd = mExecutor.execute(cmd);
             Assert.AreEqual("C:\\Users\\Dennis\\Pictures\\test\\würfel.png", cmd.Parameter);
             xmlManager.deleteXml();
@@ -48,10 +47,9 @@ namespace SmartTransferServer_V2._0.Tests
             Killer mKiller = new Killer();
             Authenticator mAuthenticator = new Authenticator();
             CommandFactory cmdFactory = new CommandFactory();
-            Logger SmartLogger = new Logger();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{-1;Hans;4;none;none;none}");
-            Executor mExecutor = new Executor(mAuthenticator, mKiller, SmartLogger);
+            Executor mExecutor = new Executor(mAuthenticator, mKiller);
             cmd = mExecutor.execute(cmd);
             xmlManager.deleteXml();            
             Assert.AreEqual("C:\\Users\\Dennis\\Pictures\\test3\\test.odp+C:\\Users\\Dennis\\Pictures\\test3\\lol.odg+C:\\Users\\Dennis\\Pictures\\test3\\unterordner\\buum.txt+C:\\Users\\Dennis\\Pictures\\test3\\unterordner\\ka\\hier.txt", cmd.Parameter);
@@ -70,10 +68,9 @@ namespace SmartTransferServer_V2._0.Tests
             Killer mKiller = new Killer();
             Authenticator mAuthenticator = new Authenticator();
             CommandFactory cmdFactory = new CommandFactory();
-            Logger SmartLogger = new Logger();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{42;Hans;1;C:\\Users\\Dennis\\Pictures\\test\\abc;none;Inhalt}");
-            Executor mExecutor = new Executor(mAuthenticator, mKiller, SmartLogger);
+            Executor mExecutor = new Executor(mAuthenticator, mKiller);
             cmd = mExecutor.execute(cmd);
             xmlManager.deleteXml();
             //System.IO.File.Delete("C:\\Users\\Dennis\\Pictures\\test\\abc");
@@ -95,10 +92,9 @@ namespace SmartTransferServer_V2._0.Tests
             Killer mKiller = new Killer();
             Authenticator mAuthenticator = new Authenticator();
             CommandFactory cmdFactory = new CommandFactory();
-            Logger SmartLogger = new Logger();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{42;Hans;2;C:\\Users\\Dennis\\Pictures\\test\\abc;none;none}");
-            Executor mExecutor = new Executor(mAuthenticator, mKiller,SmartLogger);
+            Executor mExecutor = new Executor(mAuthenticator, mKiller);
             cmd = mExecutor.execute(cmd);
             xmlManager.deleteXml();
             
@@ -119,10 +115,9 @@ namespace SmartTransferServer_V2._0.Tests
             Killer mKiller = new Killer();
             Authenticator mAuthenticator = new Authenticator();
             CommandFactory cmdFactory = new CommandFactory();
-            Logger SmartLogger = new Logger();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{42;Hans;0;C:\\Users\\Dennis\\Pictures\\test2\\abc.txt;none;none}");
-            Executor mExecutor = new Executor(mAuthenticator, mKiller,SmartLogger);
+            Executor mExecutor = new Executor(mAuthenticator, mKiller);
             cmd = mExecutor.execute(cmd);
             xmlManager.deleteXml();
            
@@ -145,10 +140,9 @@ namespace SmartTransferServer_V2._0.Tests
             mAuthenticator.Id = 42;
             mAuthenticator.Login = true;
             CommandFactory cmdFactory = new CommandFactory();
-            Logger SmartLogger = new Logger();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{42;Hans;8;none;none;none}");
-            Executor mExecutor = new Executor(mAuthenticator, mKiller,SmartLogger);
+            Executor mExecutor = new Executor(mAuthenticator, mKiller);
             cmd = mExecutor.execute(cmd);
             xmlManager.deleteXml();
            
@@ -171,10 +165,9 @@ namespace SmartTransferServer_V2._0.Tests
             mAuthenticator.Id = 42;
             mAuthenticator.Login = true;
             CommandFactory cmdFactory = new CommandFactory();
-            Logger SmartLogger = new Logger();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{-1;SERVER;14;none;undefined error;none}");
-            Executor mExecutor = new Executor(mAuthenticator, mKiller,SmartLogger);
+            Executor mExecutor = new Executor(mAuthenticator, mKiller);
             cmd = mExecutor.execute(cmd);
             xmlManager.deleteXml();
             
@@ -196,11 +189,10 @@ namespace SmartTransferServer_V2._0.Tests
             Authenticator mAuthenticator = new Authenticator();
             mAuthenticator.Id = 42;
             mAuthenticator.Login = true;
-            CommandFactory cmdFactory = new CommandFactory();
-            Logger SmartLogger = new Logger();
+            CommandFactory cmdFactory = new CommandFactory();            
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{42;Hans;10;C:\\Users\\Dennis\\Pictures\\test\\würfel.png;none;none}");
-            Executor mExecutor = new Executor(mAuthenticator, mKiller,SmartLogger);
+            Executor mExecutor = new Executor(mAuthenticator, mKiller);
             cmd = mExecutor.execute(cmd);
             xmlManager.deleteXml();
             
