@@ -52,10 +52,10 @@ namespace SmartTransferServer_V2._0
                 SmartCleaner.clean(CmdReceiver.CurrentClient);
                 SmartLogger.getReady();
                 //Receive an encrypted RequestCommandStr
-                String encryptedRequestComandStr = CmdReceiver.waitForCommand();
+                byte[] encryptedRequestComand = CmdReceiver.waitForCommand();
                 SmartLogger.incomingCommand();
                 //Decrypt the encrypted RequestCommandStr
-                String decryptedRequestComandStr = CmdDecrypter.decrypt(encryptedRequestComandStr);
+                String decryptedRequestComandStr = CmdDecrypter.decrypt(encryptedRequestComand);
                 //If the encrypted RequestCommandStr has got a wrong encryption..
                 if(decryptedRequestComandStr== Decrypter.WRONG_PASSWORD)
                 {

@@ -15,9 +15,13 @@ namespace SmartTransferServer_V2._0
             SERVER_PW = server_pw;
         }
 
-        public string decrypt(string encryptedRequestStr)
+        public string decrypt(byte[] encryptedRequest)
         {
             string EncryptionKey = SERVER_PW;
+            RijndaelManaged rijManaged = GetRijndaelManaged(EncryptionKey);
+            byte[] receivedData = Decrypt(encryptedRequest, rijManaged);
+            string encryptedRequestStr = Encoding.Default.GetString(receivedData);
+
             encryptedRequestStr = encryptedRequestStr.Replace(" ", "+");
             byte[] cipherBytes = Convert.FromBase64String(encryptedRequestStr);
             try
@@ -47,5 +51,33 @@ namespace SmartTransferServer_V2._0
             //Remove password from string
             return encryptedRequestStr.Substring(SERVER_PW.Length,encryptedRequestStr.Length-SERVER_PW.Length);
         }
+        private static RijndaelManaged GetRijndaelManaged(String secretKey)
+        {
+            var keyBytes = new byte[16];
+            var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+            Array.Copy(secretKeyBytes, keyBytes, Math.Min(keyBytes.Length, secretKeyBytes.Length));
+            return new RijndaelManaged
+            {
+                Mode = CipherMode.CBC,
+                Padding = PaddingMode.PKCS7,
+                KeySize = 128,
+                BlockSize = 128,
+                Key = keyBytes,
+                IV = keyBytes
+            };
+        }
+
+        private static byte[] Encrypt(byte[] plainBytes, RijndaelManaged rijndaelManaged)
+        {
+            return rijndaelManaged.CreateEncryptor()
+                .TransformFinalBlock(plainBytes, 0, plainBytes.Length);
+        }
+
+        private static byte[] Decrypt(byte[] encryptedData, RijndaelManaged rijndaelManaged)
+        {
+            return rijndaelManaged.CreateDecryptor()
+                .TransformFinalBlock(encryptedData, 0, encryptedData.Length);
+        }
     }
+
 }
