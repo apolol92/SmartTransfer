@@ -76,6 +76,7 @@ namespace SmartTransferServer_V2._0
                 }
                 incoming.Add(data2);              
                 data = new byte[1024];
+                //Logger.print(Encoding.Default.GetString(data));                
                 if (recv < 20)
                 {
                     stop = true;

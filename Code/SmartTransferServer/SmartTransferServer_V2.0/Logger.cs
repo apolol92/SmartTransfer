@@ -28,6 +28,12 @@ namespace SmartTransferServer_V2._0
             streamWriter.Close();
         }
 
+        public static void print(string command)
+        {
+            streamWriter = File.AppendText(LOG_PATH);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + command, true);
+            streamWriter.Close();
+        }
 
         public static void getReady()
         {

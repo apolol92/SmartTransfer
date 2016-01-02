@@ -10,10 +10,9 @@ import android.widget.ProgressBar;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import app.transfer.smart.smarttransfer.MainActivity;
-import app.transfer.smart.smarttransfer.server_selection_activity.ServerSelectionActivity;
 import app.transfer.smart.smarttransfer.global.SqliteManager;
 import app.transfer.smart.smarttransfer.global.User;
+import app.transfer.smart.smarttransfer.server_selection_activity.ServerSelectionActivity;
 
 /**
  * Created by apolol92 on 22.12.2015.
@@ -71,11 +70,11 @@ public class SearchEngine {
 
     public void startNextActivity() {
         WlanServer currentWlanServer = SqliteManager.getInstance().getCurrentWlanServer();
-        if(currentWlanServer==null) {
+        //if(currentWlanServer==null) {
             Intent nIntent = new Intent(this.context,ServerSelectionActivity.class);
             nIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.context.startActivity(nIntent);
-        }
+       /* }
         else {
             if (User.getInstance().getWlanServerList().contains(currentWlanServer)) {
                 Intent nIntent = new Intent(this.context, MainActivity.class);
@@ -87,7 +86,8 @@ public class SearchEngine {
                 this.context.startActivity(nIntent);
 
             }
-        }
+
+        }*/
 
     }
 }

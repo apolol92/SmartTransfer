@@ -1,16 +1,14 @@
 package app.transfer.smart.smarttransfer.server_selection_activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import app.transfer.smart.smarttransfer.MainActivity;
 import app.transfer.smart.smarttransfer.R;
+import app.transfer.smart.smarttransfer.global.ServerCommunicator;
 import app.transfer.smart.smarttransfer.global.SqliteManager;
 import app.transfer.smart.smarttransfer.welcome_activity.WlanServer;
 
@@ -33,13 +31,13 @@ public class ServerSelectionView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 //Add password to wlanServer
-                wlanServer.setPw(((EditText)innerLayout.getChildAt(0)).getText().toString());
+                //wlanServer.setPw(((EditText)innerLayout.getChildAt(1)).getText().toString());
+                wlanServer.setPw("test123456789123");
                 //Set current server
                 SqliteManager.getInstance().setCurrentServer(wlanServer);
                 //Connect to
-                Intent nIntent = new Intent(context, MainActivity.class);
-                nIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(nIntent);
+                ServerCommunicator.sendLogin(wlanServer,context);
+
             }
         });
 

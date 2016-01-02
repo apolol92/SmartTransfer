@@ -84,6 +84,8 @@ public class SqliteManager  extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(this.CREATE_CURRENT_SERVER_TABLE);
         db.execSQL(this.CREATE_LAST_TAB_TABLE);
+        //deleteCurrentServer();
+
     }
 
     @Override

@@ -9,9 +9,12 @@ import app.transfer.smart.smarttransfer.welcome_activity.WlanServerList;
 public class User {
     BroadcastServerList broadcastServerList;
     WlanServerList wlanServerList;
+    public String server_pw="test123456789123";
+    public int id;
     private User() {
         this.broadcastServerList = new BroadcastServerList();
         this.wlanServerList = new WlanServerList();
+        this.id = -1;
     }
 
     private static User user = null;
@@ -19,6 +22,7 @@ public class User {
     public static void init() {
         if(user == null) {
             user = new User();
+            user.id = -1;
         }
     }
 

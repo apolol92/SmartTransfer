@@ -59,7 +59,8 @@ namespace SmartTransferServer_V2._0.Tests
         {
             CommandFactory cmdFactory = new CommandFactory();
             Command cmd = cmdFactory.extractCommandFromStr(cmdStr);
-            Killer mKiller = new Killer();
+            Authenticator mAuthenicator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenicator);
             mKiller.LastAlive = mKiller.GetCurrentUnixTimestampMillis();
             Assert.AreEqual(false,mKiller.kill(cmd));         
         }
@@ -68,7 +69,8 @@ namespace SmartTransferServer_V2._0.Tests
         {
             CommandFactory cmdFactory = new CommandFactory();
             Command cmd = cmdFactory.extractCommandFromStr(cmdStr);
-            Killer mKiller = new Killer();
+            Authenticator mAuthenicator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenicator);
             mKiller.LastAlive = mKiller.GetCurrentUnixTimestampMillis()+Killer.LIVING_TIME+1;
             Assert.AreEqual(true, mKiller.kill(cmd));
         }
@@ -77,7 +79,8 @@ namespace SmartTransferServer_V2._0.Tests
         {
             CommandFactory cmdFactory = new CommandFactory();
             Command cmd = cmdFactory.extractCommandFromStr("{42;Hans;3;none;none;none}");
-            Killer mKiller = new Killer();
+            Authenticator mAuthenicator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenicator);
             mKiller.LastAlive = mKiller.GetCurrentUnixTimestampMillis()-20;
             mKiller.clientEntreation(cmd);
             Assert.AreEqual(mKiller.GetCurrentUnixTimestampMillis(), mKiller.LastAlive);

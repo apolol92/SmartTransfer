@@ -37,10 +37,10 @@ namespace SmartTransferServer_V2._0
             Cleaner SmartCleaner = new Cleaner();
             Receiver CmdReceiver = new Receiver();
             Decrypter CmdDecrypter = new Decrypter(SERVER_PW);
-            CommandFactory CmdFactory = new CommandFactory();
-            Killer SmartKiller = new Killer();
+            CommandFactory CmdFactory = new CommandFactory();            
             SenderAssistant SmartSenderAssistant = new SenderAssistant();
             Authenticator SmartAuthenticator = new Authenticator();
+            Killer SmartKiller = new Killer(SmartAuthenticator);
             Executor SmartExecutor = new Executor(SmartAuthenticator, SmartKiller);
             Encrypter CmdEncrypter = new Encrypter(SERVER_PW);
             Sender SmartSender = new Sender();
@@ -97,7 +97,8 @@ namespace SmartTransferServer_V2._0
                     }
                     //Client want to connect! .. let him.. PW checked before..
                     else
-                    {                        
+                    {
+                        SmartKiller.LastAlive = SmartKiller.GetCurrentUnixTimestampMillis();   
                         //SmartSenderAssistant.sendLoginSucceed(CmdReceiver.CurrentClient);
                         Command loginSucceedResponse = CmdFactory.createLoginSuceedCommand(SmartAuthenticator);
                         Logger.loginSucceed(SmartAuthenticator.Id);

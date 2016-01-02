@@ -6,15 +6,17 @@ namespace SmartTransferServer_V2._0
     {
         const int KEEP_ALIVE_TYP = 3;
         const long NOT_BORN = -1;
-        public const long LIVING_TIME = 30000;
+        public const long LIVING_TIME = 8000;
         private long lastAlive;
         private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        Authenticator SmartAuthenticator;
 
 
 
-        public Killer()
+        public Killer(Authenticator SmartAuthenticator)
         {
             this.LastAlive = NOT_BORN;
+            this.SmartAuthenticator = SmartAuthenticator;
         }
 
         public bool kill(Command requestCommand)
@@ -52,6 +54,15 @@ namespace SmartTransferServer_V2._0
                     {
                         this.LastAlive = currentTime;
                     }
+                }
+            }
+            else
+            {
+                long currentTime = GetCurrentUnixTimestampMillis();
+                if (Math.Abs(currentTime - this.LastAlive) > LIVING_TIME)
+                {
+                    this.LastAlive = NOT_BORN;
+                    this.SmartAuthenticator.Login = false;
                 }
             }
         }

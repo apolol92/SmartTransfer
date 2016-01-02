@@ -21,8 +21,9 @@ namespace SmartTransferServer_V2._0.Tests
             //TODO: Initialization
             xmlManager.addServerPassword("test123");           
             xmlManager.saveXml();
-            Killer mKiller = new Killer();
-            Authenticator mAuthenticator = new Authenticator();            
+            
+            Authenticator mAuthenticator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenticator);
             CommandFactory cmdFactory = new  CommandFactory();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{-1;Hans;4;none;none;none}");
@@ -44,8 +45,9 @@ namespace SmartTransferServer_V2._0.Tests
             //TODO: Initialization
             xmlManager.addServerPassword("test123");
             xmlManager.saveXml();
-            Killer mKiller = new Killer();
+            
             Authenticator mAuthenticator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenticator);
             CommandFactory cmdFactory = new CommandFactory();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{-1;Hans;4;none;none;none}");
@@ -65,8 +67,9 @@ namespace SmartTransferServer_V2._0.Tests
             //TODO: Initialization
             xmlManager.addServerPassword("test123");
             xmlManager.saveXml();
-            Killer mKiller = new Killer();
+            
             Authenticator mAuthenticator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenticator);
             CommandFactory cmdFactory = new CommandFactory();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{42;Hans;1;C:\\Users\\Dennis\\Pictures\\test\\abc;none;Inhalt}");
@@ -89,8 +92,9 @@ namespace SmartTransferServer_V2._0.Tests
             //TODO: Initialization
             xmlManager.addServerPassword("test123");
             xmlManager.saveXml();
-            Killer mKiller = new Killer();
+            
             Authenticator mAuthenticator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenticator);
             CommandFactory cmdFactory = new CommandFactory();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{42;Hans;2;C:\\Users\\Dennis\\Pictures\\test\\abc;none;none}");
@@ -112,8 +116,9 @@ namespace SmartTransferServer_V2._0.Tests
             //TODO: Initialization
             xmlManager.addServerPassword("test123");
             xmlManager.saveXml();
-            Killer mKiller = new Killer();
+            
             Authenticator mAuthenticator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenticator);
             CommandFactory cmdFactory = new CommandFactory();
             //------
             Command cmd = cmdFactory.extractCommandFromStr("{42;Hans;0;C:\\Users\\Dennis\\Pictures\\test2\\abc.txt;none;none}");
@@ -135,8 +140,8 @@ namespace SmartTransferServer_V2._0.Tests
             //TODO: Initialization
             xmlManager.addServerPassword("test123");
             xmlManager.saveXml();
-            Killer mKiller = new Killer();
             Authenticator mAuthenticator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenticator);
             mAuthenticator.Id = 42;
             mAuthenticator.Login = true;
             CommandFactory cmdFactory = new CommandFactory();
@@ -159,9 +164,9 @@ namespace SmartTransferServer_V2._0.Tests
             xmlManager.addChildToCategory(Categories.MUSIC, "C:\\Users\\Dennis\\Pictures\\test");
             //TODO: Initialization
             xmlManager.addServerPassword("test123");
-            xmlManager.saveXml();
-            Killer mKiller = new Killer();
+            xmlManager.saveXml();           
             Authenticator mAuthenticator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenticator);
             mAuthenticator.Id = 42;
             mAuthenticator.Login = true;
             CommandFactory cmdFactory = new CommandFactory();
@@ -184,9 +189,9 @@ namespace SmartTransferServer_V2._0.Tests
             xmlManager.addChildToCategory(Categories.MUSIC, "C:\\Users\\Dennis\\Pictures\\test");
             //TODO: Initialization
             xmlManager.addServerPassword("test123");
-            xmlManager.saveXml();
-            Killer mKiller = new Killer();
+            xmlManager.saveXml();            
             Authenticator mAuthenticator = new Authenticator();
+            Killer mKiller = new Killer(mAuthenticator);
             mAuthenticator.Id = 42;
             mAuthenticator.Login = true;
             CommandFactory cmdFactory = new CommandFactory();            

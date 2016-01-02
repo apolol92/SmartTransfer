@@ -12,7 +12,7 @@ namespace SmartTransferServer_V2._0
         public static RijndaelManaged GetRijndaelManaged(String secretKey)
         {
             var keyBytes = new byte[16];
-            var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+            var secretKeyBytes = Encoding.Default.GetBytes(secretKey);
             Array.Copy(secretKeyBytes, keyBytes, Math.Min(keyBytes.Length, secretKeyBytes.Length));
             return new RijndaelManaged
             {

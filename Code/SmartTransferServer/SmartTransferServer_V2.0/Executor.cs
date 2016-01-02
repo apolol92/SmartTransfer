@@ -88,7 +88,7 @@ namespace SmartTransferServer_V2._0
                 Image thumb = image.GetThumbnailImage(120, 120, () => false, IntPtr.Zero);
                 ImageConverter converter = new ImageConverter();
                 byte[] imgArray = (byte[])converter.ConvertTo(thumb, typeof(byte[]));
-                string imgStr = System.Text.Encoding.UTF8.GetString(imgArray);
+                string imgStr = System.Text.Encoding.Default.GetString(imgArray);
                 return cmdFactory.extractCommandFromStr("{42;SERVER;11;"+ cmd.Filename+"; none;"+imgStr+"}");
             }
             return cmdFactory.extractCommandFromStr("{42;SERVER;7;none;no thumbnail avaible;none}");
@@ -160,7 +160,14 @@ namespace SmartTransferServer_V2._0
             CommandFactory cmdFactory = new CommandFactory();
             if (SmartSecurity.PathIsAllowed(allRootPaths, filename))
             {
+                
                 MyFileManager.saveFile(filename, cmd.Data);               
+                return cmdFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", "none");
+            }
+            else
+            {
+                MyFileManager.saveFile(filename, cmd.Data);
+                Logger.print("Path isnt allowed..");
                 return cmdFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", "none");
             }
             cmd.Filename = filename;

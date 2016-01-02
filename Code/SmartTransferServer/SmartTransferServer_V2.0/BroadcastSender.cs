@@ -60,7 +60,7 @@ namespace SmartTransferServer_V2._0
             {
                 this.client = new UdpClient();
                 this.ip = new IPEndPoint(IPAddress.Parse("255.255.255.255"), PORT_NUMBER);
-                this.bytes = Encoding.UTF8.GetBytes(I_AM_HERE);
+                this.bytes = Encoding.Default.GetBytes(I_AM_HERE);
                 this.Active = true;
                 this.n_secs = n_secs;
                 this.n_secs = 1;

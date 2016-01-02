@@ -14,6 +14,7 @@ namespace SmartTransferServer_V2._0
         {
             SenderAssistant senderAssistent = new SenderAssistant();
             senderAssistent.sendString(mEncrypter.encrypt(responseCommand), currentClient);
+            currentClient.Close();
         }
     }
 }
