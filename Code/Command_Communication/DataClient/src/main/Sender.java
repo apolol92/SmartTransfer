@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
 public class Sender {
     public static Socket socket;
     public static void sendData(byte[] data) {
-        int serverPort = 2210;
+        int serverPort = 7000;
         try {
             InetAddress host = InetAddress.getByName("localhost");
             socket = new Socket(host,serverPort);

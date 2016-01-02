@@ -81,16 +81,11 @@ namespace SmartTransferServer_V2._0
             Security SmartSecurity = new Security();
             XmlManager xmlManager = new XmlManager();
             List<string> allRootPaths = xmlManager.getAllChilds();
-            if (SmartSecurity.PathIsAllowed(allRootPaths, cmd.Filename))
-            {
-                Image image = Image.FromFile(cmd.Filename);
-                Image thumb = image.GetThumbnailImage(120, 120, () => false, IntPtr.Zero);
-                ImageConverter converter = new ImageConverter();
-                byte[] imgArray = (byte[])converter.ConvertTo(thumb, typeof(byte[]));               
-                return CommandFactory.createCommand(this.SmartAuthenticator.Id, SERVERNAME, SEND_CLIENT_THUMBNAIL, cmd.Filename, "none", imgArray);
-                
-            }
-            return CommandFactory.createCommand(this.SmartAuthenticator.Id, SERVERNAME, STATUS, cmd.Filename, "no access", new byte[1]);
+            Image image = Image.FromFile(cmd.Filename);
+            Image thumb = image.GetThumbnailImage(120, 120, () => false, IntPtr.Zero);
+            ImageConverter converter = new ImageConverter();
+            byte[] imgArray = (byte[])converter.ConvertTo(thumb, typeof(byte[]));               
+            return CommandFactory.createCommand(this.SmartAuthenticator.Id, SERVERNAME, SEND_CLIENT_THUMBNAIL, cmd.Filename, "none", imgArray);
         }
 
         private Command logout()
@@ -104,9 +99,10 @@ namespace SmartTransferServer_V2._0
         {
   
             XmlManager xmlManager = new XmlManager();
-            FileManager fileManager = new FileManager();
+            FileManager fileManager = new FileManager();            
             List<string> allFilePaths = fileManager.listAllFilesInCategoryFolders(xmlManager.getAllChilds());
-            allFilePaths = sortFilesByCreationTime(allFilePaths);
+            Logger.print(allFilePaths.Count+"");
+            //allFilePaths = sortFilesByCreationTime(allFilePaths);
             return CommandFactory.createCommand(cmd.Id, SERVERNAME, SEND_AVAIBLE_FILES, "none", concatFiles(allFilePaths), new byte[1]);
         }
 
@@ -138,13 +134,13 @@ namespace SmartTransferServer_V2._0
             XmlManager xmlManager = new XmlManager();
             List<string> allRootPaths = xmlManager.getAllChilds();
             CommandFactory cmdFactory = new CommandFactory();
-            if (SmartSecurity.PathIsAllowed(allRootPaths,cmd.Filename))
-            {
-                FileManager fileManager = new FileManager();
-                fileManager.deleteFile(cmd.Filename);
-                return CommandFactory.createCommand(SmartAuthenticator.Id,SERVERNAME,STATUS,cmd.Filename,"deleted file",new byte[1]);
-            }
-            return CommandFactory.createCommand(SmartAuthenticator.Id, SERVERNAME, STATUS, cmd.Filename, "not deleted file", new byte[1]);
+            //if (SmartSecurity.PathIsAllowed(allRootPaths,cmd.Filename))
+            //{
+            FileManager fileManager = new FileManager();
+            fileManager.deleteFile(cmd.Filename);
+            return CommandFactory.createCommand(SmartAuthenticator.Id,SERVERNAME,STATUS,cmd.Filename,"deleted file",new byte[1]);
+            //}
+            //return CommandFactory.createCommand(SmartAuthenticator.Id, SERVERNAME, STATUS, cmd.Filename, "not deleted file", new byte[1]);
         }
 
         private Command saveDataOnServer(Command cmd)
@@ -188,9 +184,13 @@ namespace SmartTransferServer_V2._0
             {
                 //Replace '+', because some files have a name with a '+'
                 files += allFiles[i].Replace("+", PLUS_CHAR) + "+";
+                if (i==allFiles.Count-1)
+                {                    
+                    files = files.Substring(0, files.Length - 1);
+                }
             }
             //Remove last concatting '+'
-            files = files.Substring(0, files.Length - 1);
+            
             return files;
         }
         public long GetCurrentUnixTimestampMillis(DateTime current)

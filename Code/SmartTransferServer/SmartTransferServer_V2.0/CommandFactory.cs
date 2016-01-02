@@ -134,7 +134,8 @@ namespace SmartTransferServer_V2._0
 
         internal Command createLoginSuceedCommand(Authenticator smartAuthenticator)
         {
-            Command nCommand = CommandFactory.createCommand(smartAuthenticator.generateNewId(), "SERVER", 7, "none", "Login successed", new byte[1]);
+            byte[] nothing = new byte[] { 10, 10, 10, 10 };
+            Command nCommand = CommandFactory.createCommand(smartAuthenticator.generateNewId(), "SERVER", 7, "none", "Login successed", nothing);
             return nCommand;
         }
 

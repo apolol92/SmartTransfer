@@ -23,6 +23,8 @@ namespace SmartTransferServer_V2._0
     {
         public MainWindow()
         {
+            XmlManager xmlDeleter = new XmlManager();
+            xmlDeleter.deleteXml();
             InitializeComponent();
             XmlManager xmlManager = new XmlManager();
             xmlManager.addChildToCategory(Categories.MUSIC, "C:\\Users\\Dennis\\Music");

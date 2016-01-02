@@ -146,7 +146,10 @@ namespace SmartTransferServer_V2._0
         /// </summary>
         public void saveXml()
         {
+            
             this.xmldoc.Save(CONFIG_PATH);
+
+            
         }
 
         public void deleteXml()

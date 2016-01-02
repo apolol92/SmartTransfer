@@ -15,7 +15,7 @@ namespace SmartTransferServer_V2._0
         {
             XmlManager xmlManager = new XmlManager();
             SERVER_PW = xmlManager.readServerPassword();
-            xmlManager.deleteXml();
+            //xmlManager.deleteXml();
             
         }
 
@@ -65,7 +65,7 @@ namespace SmartTransferServer_V2._0
                 }
                 Logger.correctPassword();
                 //Extract RequestCommandStr as Command-Instance
-                Command requestCommand = CommandFactory.extractCommand(decryptedRequestComand);
+                Command requestCommand = CommandFactory.extractCommand(decryptedRequestComand);              
                 //If requestCommandStr has got the wrong format..
                 if(requestCommand== null)
                 {
@@ -74,7 +74,10 @@ namespace SmartTransferServer_V2._0
                     continue;
                 }
                 Logger.correctCmdFormat();
-                SmartKiller.clientEntreation(requestCommand);
+                if(SmartKiller.clientEntreation(requestCommand)==1)
+                {
+                    continue;
+                }                 
                 //If userid too old..
                 if(SmartKiller.kill(requestCommand))
                 {
@@ -102,6 +105,7 @@ namespace SmartTransferServer_V2._0
                         //SmartSenderAssistant.sendLoginSucceed(CmdReceiver.CurrentClient);
                         Command loginSucceedResponse = CmdFactory.createLoginSuceedCommand(SmartAuthenticator);
                         Logger.loginSucceed(SmartAuthenticator.Id);
+                        Logger.print("HERE");
                         SmartSender.send(loginSucceedResponse, CmdReceiver.CurrentClient,CmdEncrypter);
                         continue;
                     }                                      
@@ -109,7 +113,7 @@ namespace SmartTransferServer_V2._0
                 //If there was a login.. Check if the user has got the correct Session-ID.. if not do this if
                 if (SmartAuthenticator.isCorrectId(requestCommand)==false)
                 {
-                    Logger.wrongId();
+                    Logger.wrongId(requestCommand.Id);
                     //SmartSenderAssistant.sendWrongId(CmdReceiver.CurrentClient);
                     continue;
                 }

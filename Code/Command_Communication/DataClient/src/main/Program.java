@@ -18,19 +18,67 @@ import java.util.Base64;
 public class Program {
 
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) throws IOException, InterruptedException {
         String key = "test123456789123";
-        System.out.println("Create cmd");
-        Command cmd = CommandFactory.createCommand(12, "USER", 4, "test", "sdf", FileManager.readeFile());
-        System.out.println("Send cmd");
-        Sender.sendData(Crypter.Encrypt(cmd.toByteArr(), key));
-        System.out.println("Receive cmd");
-        Command received = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket),key));
-        System.out.println("Save file");
-        FileManager.saveFile(received.Data,"incoming");
-
+        //Login to Server
+        Command loginCmd = CommandFactory.createCommand(-1, "USER", 9, "none", "none", new byte[1]);
+        byte[] loginCmdBytes = Crypter.Encrypt(loginCmd.toByteArr(),key);
+        Sender.sendData(loginCmdBytes);
+        Command rLoginCmd = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket),key));
+        Sender.socket.close();
+        //List Data from Server
+        Command listCmd = CommandFactory.createCommand(rLoginCmd.Id,"USER",4,"none","none",new byte[1]);
+        byte[] listCmdBytes = Crypter.Encrypt(listCmd.toByteArr(), key);
+        Sender.sendData(listCmdBytes);
+        Command rListCmd = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket), key));
+        Sender.socket.close();
+        System.out.println(rListCmd.Typ);
+        System.out.println("FILES:" + rListCmd.Parameter);
+        //Download Data from Server
+        //C:\Users\Dennis\Pictures\FebSep2015\links.png
+        Command downloadCmd = CommandFactory.createCommand(rListCmd.Id, "USER", 0, "man.png","none",new byte[1]);
+        byte[] downloadCmdBytes = Crypter.Encrypt(downloadCmd.toByteArr(),key);
+        Sender.sendData(downloadCmdBytes);
+        Command rDownloadCmd = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket),key));
+        System.out.println(rDownloadCmd.Data.length);
+        FileManager.saveFile(rDownloadCmd.Data, "downloaded");
+        Sender.socket.close();
+        //Upload Data to Server
+        Command uploadCmd = CommandFactory.createCommand(rDownloadCmd.Id, "USER", 1, "incoming.png", "none", FileManager.readeFile());
+        byte[] uploadCmdBytes = Crypter.Encrypt(uploadCmd.toByteArr(), key);
+        Sender.sendData(uploadCmdBytes);
+        Command rUploadCmd = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket),key));
+        Sender.socket.close();
+        System.out.println(rUploadCmd.Id);
+        //Delete Data from Server
+        Command deleteCmd = CommandFactory.createCommand(rUploadCmd.Id, "USER", 2, "incoming.png", "none", new byte[1]);
+        byte[] deleteCmdBytes = Crypter.Encrypt(deleteCmd.toByteArr(), key);
+        Sender.sendData(deleteCmdBytes);
+        System.out.println("Wait for delete responds");
+        Command rDeleteCmd = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket),key));
+        System.out.println(rDeleteCmd.Parameter);
+        Sender.socket.close();
+        //Download Thumbnail
+        Command thumbCmd = CommandFactory.createCommand(rDeleteCmd.Id, "USER", 10, "man.png", "none", new byte[1]);
+        byte[] thumbCmdBytes = Crypter.Encrypt(thumbCmd.toByteArr(), key);
+        Sender.sendData(thumbCmdBytes);
+        Command rThumbCmd = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket),key));
+        System.out.println(rThumbCmd.Parameter+ " " +rThumbCmd.Data.length);
+        FileManager.saveFile(rThumbCmd.Data, "thumb");
+        Sender.socket.close();
+        //Keep Alive
+        Command aliveCmd = CommandFactory.createCommand(rThumbCmd.Id, "USER", 3, "man.png", "none", new byte[1]);
+        byte[] aliveCmdBytes = Crypter.Encrypt(aliveCmd.toByteArr(), key);
+        Sender.sendData(aliveCmdBytes);
+        Sender.socket.close();
+        //Logout
+        Command logoutCmd = CommandFactory.createCommand(rThumbCmd.Id, "USER", 8, "man.png", "none", new byte[1]);
+        byte[] logoutCmdBytes = Crypter.Encrypt(logoutCmd.toByteArr(), key);
+        Sender.sendData(logoutCmdBytes);
         Sender.socket.close();
     }
+
+
 
     /*public static String getBase64StringFromBytes(byte[] bytes)
     {

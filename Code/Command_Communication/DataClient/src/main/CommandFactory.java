@@ -33,6 +33,7 @@ public class CommandFactory {
             header += (char)rawCmd[i];
         }
         try {
+
             header =new String(Base64.getDecoder().decode(header.getBytes()),"UTF-8");
             header = "{" + header + "}";
             Command cmd = extractHeader(header);

@@ -39,13 +39,13 @@ namespace SmartTransferServer_V2._0
             this.lastAlive = NOT_BORN;
         }
 
-        public void clientEntreation(Command requestCommand)
+        public int clientEntreation(Command requestCommand)
         {
             if (requestCommand.Typ == KEEP_ALIVE_TYP)
             {
                 if (this.LastAlive == NOT_BORN)
                 {
-                    this.LastAlive = GetCurrentUnixTimestampMillis();
+                    this.LastAlive = GetCurrentUnixTimestampMillis();                    
                 }
                 else
                 {
@@ -55,6 +55,9 @@ namespace SmartTransferServer_V2._0
                         this.LastAlive = currentTime;
                     }
                 }
+                Logger.print("SURVIVED");
+                return 1;
+
             }
             else
             {
@@ -65,6 +68,7 @@ namespace SmartTransferServer_V2._0
                     this.SmartAuthenticator.Login = false;
                 }
             }
+            return 0;
         }
         public long GetCurrentUnixTimestampMillis()
         {

@@ -13,6 +13,7 @@ namespace SmartTransferServer_V2._0
     {
         private Socket serverSocket;
         private Socket currentClient;
+        private int PACKET_SIZE = 1000;
 
         public Socket ServerSocket
         {
@@ -67,7 +68,8 @@ namespace SmartTransferServer_V2._0
             //Receive all data
             while (!stop)
             {
-                recv = currentClient.Receive(data, 20, SocketFlags.None);
+               
+                recv = currentClient.Receive(data, PACKET_SIZE, SocketFlags.None);
                 total_recv += recv;
                 byte[] data2 = new byte[recv];
                 for (int i = 0; i < recv; i++)
@@ -77,7 +79,7 @@ namespace SmartTransferServer_V2._0
                 incoming.Add(data2);              
                 data = new byte[1024];
                 //Logger.print(Encoding.Default.GetString(data));                
-                if (recv < 20)
+                if (recv < PACKET_SIZE)
                 {
                     stop = true;
                 }

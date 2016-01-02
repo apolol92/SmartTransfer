@@ -128,10 +128,10 @@ namespace SmartTransferServer_V2._0
 
      
 
-        public static void wrongId()
+        public static void wrongId(int id)
         {
             streamWriter = File.AppendText(LOG_PATH);
-            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "wrong id:user has got the wrong id", true);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "wrong id:user has got the wrong id "+id, true);
             streamWriter.Close();
         }
 
