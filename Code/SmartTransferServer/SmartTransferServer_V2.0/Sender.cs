@@ -13,7 +13,7 @@ namespace SmartTransferServer_V2._0
         internal void send(Command responseCommand, Socket currentClient, Encrypter mEncrypter)
         {
             SenderAssistant senderAssistent = new SenderAssistant();
-            senderAssistent.sendString(mEncrypter.encrypt(responseCommand), currentClient);
+            senderAssistent.send(mEncrypter.encrypt(responseCommand), currentClient);
             currentClient.Close();
         }
     }

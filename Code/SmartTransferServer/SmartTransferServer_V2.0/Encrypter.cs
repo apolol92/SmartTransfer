@@ -13,12 +13,11 @@ namespace SmartTransferServer_V2._0
             SERVER_PW = server_pw;
         }
 
-        public string encrypt(Command responseCommand)
-        {
-            string clearText = SERVER_PW + responseCommand.toString();
+        public byte[] encrypt(Command responseCommand)
+        {            
             RijndaelManaged rijManaged = Crypto.GetRijndaelManaged(SERVER_PW);
-            byte[] clearBytes = Crypto.Encrypt(Encoding.Default.GetBytes(clearText), rijManaged);
-            return Encoding.Default.GetString(clearBytes);
+            byte[] clearBytes = Crypto.Encrypt(responseCommand.toByteArr(), rijManaged);
+            return clearBytes;
         }
         
     }

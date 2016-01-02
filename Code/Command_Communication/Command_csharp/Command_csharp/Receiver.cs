@@ -13,7 +13,7 @@ namespace Command_csharp
         private Socket serverSocket;
         public Socket currentClient;
         private readonly int SERVER_PORT = 2210;
-        private readonly int PACKET_SIZE = 20;
+        private readonly int PACKET_SIZE = 1000;
 
         public Receiver()
         {
@@ -31,17 +31,17 @@ namespace Command_csharp
 
         public byte[] receiveData()
         {
-            byte[] data = new byte[1024];
-            int recv;
+            byte[] data = new byte[PACKET_SIZE];
+            int recv = 0;
             int total_recv = 0;
             List<Byte[]> incoming = new List<Byte[]>();
-            data = new byte[PACKET_SIZE];
             bool stop = false;
             //Receive all data
             while (!stop)
             {
+                Console.WriteLine(recv + "");
                 recv = this.currentClient.Receive(data, PACKET_SIZE, SocketFlags.None);
-
+                
 
                 total_recv += recv;
                 byte[] data2 = new byte[recv];
@@ -52,7 +52,7 @@ namespace Command_csharp
                 incoming.Add(data2);
                 data = new byte[PACKET_SIZE];
                 //Logger.print(Encoding.Default.GetString(data));                
-                if (recv < 20)
+                if (recv < PACKET_SIZE)
                 {
                     stop = true;
                 }

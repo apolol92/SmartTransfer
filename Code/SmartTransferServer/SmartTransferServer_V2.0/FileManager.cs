@@ -9,17 +9,15 @@ namespace SmartTransferServer_V2._0
 {
     class FileManager
     {
-        public string loadFile(string category, string filename)
-        {
-            //return Encoding.UTF8.GetString(Convert.FromBase64String(System.Text.Encoding.Bas.GetString(File.ReadAllBytes(filename))));
-            return System.Text.Encoding.Default.GetString(File.ReadAllBytes(filename));
+        public byte[] loadFile(string category, string filename)
+        {            
+            return File.ReadAllBytes(filename);
         }
 
-        public void saveFile(string filename, string data)
+        public void saveFile(string filename, byte[] data)
         {          
-            //TO BASE64!!!!
-            byte[] bData = Convert.FromBase64String(data);
-            File.WriteAllBytes(filename, bData);
+            //TO BASE64!!!!            
+            File.WriteAllBytes(filename, data);
         }
 
         public void deleteFile(string filename)

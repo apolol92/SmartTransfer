@@ -8,26 +8,66 @@ namespace SmartTransferServer_V2._0
 {
     public class CommandFactory
     {
-        const int COMMAND_PARTS = 6;
-
         const string markClamp = "oierkjvooejcoa";
         const string markBackClamp = "aocjeoovjkreio";
         const string markSemi = "phgjgpnopqbbv";
         const string markNewLine = "adsfdsgasdg";
         const string markTab = "orinbfdobiioeqnc";
 
+        public static Command extractCommand(byte[] rawCmd)
+        {
+            int startClam = -1, endClam = -1;
+            string header = "";
+            for (int i = 0; i < rawCmd.Length; i++)
+            {
 
-        /// <summary>
-        /// Use this method to extract commands.
-        /// Be careful by using this method.. if you want to send this extracted command.. you have to mark all characters..
-        /// </summary>
-        /// <param name="strCommand"></param>
-        /// <returns></returns>
-        public Command extractCommandFromStr(String strCommand)
+                if (rawCmd[i] == '{')
+                {
+                    startClam = i;
+                    continue;
+                }
+                else if (rawCmd[i] == '}')
+                {
+                    endClam = i;
+                    break;
+                }
+                header += (char)rawCmd[i];
+            }
+            header = Encoding.UTF8.GetString(Convert.FromBase64String(header));
+            header = "{" + header + "}";
+            Command cmd = extractHeader(header);
+            cmd.Data = extractData(rawCmd, endClam);
+            return cmd;
+        }
+
+        public static Command createCommand(int id, string username, int typ, string filename, string parameter, byte[] data)
+        {
+            Command cmd = new Command();
+            cmd.Id = id;
+            cmd.Username = username;
+            cmd.Typ = typ;
+            cmd.Filename = filename;
+            cmd.Parameter = parameter;
+            cmd.Data = data;
+            cmd = markAllSpecialCharacters(cmd);
+            return cmd;
+        }
+
+        private static byte[] extractData(byte[] rawCmd, int endClam)
+        {
+            byte[] data = new byte[rawCmd.Length - endClam - 1];
+            for (int i = endClam + 1, d = 0; i < rawCmd.Length; i++, d++)
+            {
+                data[d] = rawCmd[i];
+            }
+            return data;
+        }
+
+        private static Command extractHeader(string header)
         {
             char[] splitsCharacters = new char[] { ';', '{', '}' };
             Command nCommand = new Command();
-            String[] commandParts = strCommand.Split(splitsCharacters);
+            String[] commandParts = header.Split(splitsCharacters);
             if (commandParts == null)
             {
                 return null;
@@ -62,11 +102,7 @@ namespace SmartTransferServer_V2._0
                             nCommand.Parameter = commandParts[i + 1];
                             nCommand.Parameter = unmarkSpecialCharacters(nCommand.Parameter);
                             break;
-                        case 5:
-                            //DATA
-                            nCommand.Data = commandParts[i + 1];
-                            nCommand.Data = unmarkSpecialCharacters(nCommand.Data);
-                            break;
+
                     }
                 }
                 catch (Exception ex)
@@ -78,35 +114,7 @@ namespace SmartTransferServer_V2._0
 
             return nCommand;
         }
-
-        public Command createLoginSuceedCommand(Authenticator authenticator)
-        {
-            return extractCommandFromStr("{"+authenticator.generateNewId()+";SERVER;7;none;Login successed;none}");
-        }
-
-        /// <summary>
-        /// Use always this method to create a new command
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="username"></param>
-        /// <param name="typ"></param>
-        /// <param name="filename"></param>
-        /// <param name="parameter"></param>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public Command createCommand(int id, string username, int typ, string filename, string parameter, string data)
-        {
-            Command nCommand = new Command();
-            nCommand.Id = id;
-            nCommand.Username = markSpecialCharacters(username);
-            nCommand.Typ = typ;
-            nCommand.Filename = markSpecialCharacters(filename);
-            nCommand.Parameter = markSpecialCharacters(parameter);
-            nCommand.Data = markSpecialCharacters(data);
-            return nCommand;
-        }
-
-        private string unmarkSpecialCharacters(string str)
+        private static string unmarkSpecialCharacters(string str)
         {
             str = str.Replace(markClamp, "{");
             str = str.Replace(markBackClamp, "}");
@@ -116,16 +124,21 @@ namespace SmartTransferServer_V2._0
             return str;
         }
 
-        public Command markAllSpecialCharacters(Command cmd)
+        private static Command markAllSpecialCharacters(Command cmd)
         {
             cmd.Username = markSpecialCharacters(cmd.Username);
             cmd.Filename = markSpecialCharacters(cmd.Filename);
             cmd.Parameter = markSpecialCharacters(cmd.Parameter);
-            cmd.Data = markSpecialCharacters(cmd.Data);
             return cmd;
         }
 
-        private string markSpecialCharacters(string str)
+        internal Command createLoginSuceedCommand(Authenticator smartAuthenticator)
+        {
+            Command nCommand = CommandFactory.createCommand(smartAuthenticator.generateNewId(), "SERVER", 7, "none", "Login successed", new byte[1]);
+            return nCommand;
+        }
+
+        private static string markSpecialCharacters(string str)
         {
             str = str.Replace("{", markClamp);
             str = str.Replace("}", markBackClamp);

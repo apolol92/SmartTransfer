@@ -15,19 +15,17 @@ namespace SmartTransferServer_V2._0
             SERVER_PW = server_pw;
         }
 
-        public string decrypt(byte[] encryptedRequest)
+        public byte[] decrypt(byte[] encryptedRequest)
         {
             string EncryptionKey = SERVER_PW;
             RijndaelManaged rijManaged = Crypto.GetRijndaelManaged(EncryptionKey);
             try {              
-                byte[] receivedData = Crypto.Decrypt(encryptedRequest, rijManaged);          
-                string encryptedRequestStr = Encoding.Default.GetString(receivedData);               
-                encryptedRequestStr = encryptedRequestStr.Replace(" ", "+");
-                return encryptedRequestStr.Substring(SERVER_PW.Length);
+                byte[] receivedData = Crypto.Decrypt(encryptedRequest, rijManaged);                   
+                return receivedData;
             }
             catch(Exception ex)
             {               
-                return WRONG_PASSWORD;
+                return null;
             }          
         }
         

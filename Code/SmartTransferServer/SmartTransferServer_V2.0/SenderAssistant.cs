@@ -17,41 +17,11 @@ namespace SmartTransferServer_V2._0
         {
         }
 
-        public void sendString(string str, Socket client)
-        {
-            byte[] data = Encoding.Default.GetBytes(str);
+        public void send(byte[] data, Socket client)
+        {          
             client.Send(data, data.Length, SocketFlags.None);
         }
 
-        internal void sendWrongPassword(Socket currentClient)
-        {
-            sendString(WRONG_PASSWORD, currentClient);
-        }
-
         
-        internal void sendWrongCommandFormat(Socket currentClient)
-        {
-            sendString(WRONG_COMMAND_FORMAT, currentClient);
-        }
-
-        internal void sendObituary(Socket currentClient)
-        {
-            sendString(KILLED_BY_KILLER, currentClient);
-        }
-
-        internal void sendLoginRequired(Socket currentClient)
-        {
-            sendString(LOGIN_REQUIRED, currentClient);
-        }
-
-        internal void sendLoginSucceed(Socket currentClient)
-        {
-            sendString(LOGIN_SUCCESSED, currentClient);
-        }
-
-        internal void sendWrongId(Socket currentClient)
-        {
-            sendString(WRONG_ID, currentClient);
-        }
     }
 }

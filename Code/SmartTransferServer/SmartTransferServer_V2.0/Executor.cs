@@ -70,9 +70,8 @@ namespace SmartTransferServer_V2._0
         }
 
         private Command createErrorCommand()
-        {
-            CommandFactory cmdFactory = new CommandFactory();
-            Command cmd = cmdFactory.extractCommandFromStr("{-1;SERVER;7;none;undefined error;none}");
+        {            
+            Command cmd = CommandFactory.createCommand(-1, SERVERNAME, STATUS, "none", "undefined error", new byte[1]);
             return cmd;
         }
 
@@ -87,29 +86,28 @@ namespace SmartTransferServer_V2._0
                 Image image = Image.FromFile(cmd.Filename);
                 Image thumb = image.GetThumbnailImage(120, 120, () => false, IntPtr.Zero);
                 ImageConverter converter = new ImageConverter();
-                byte[] imgArray = (byte[])converter.ConvertTo(thumb, typeof(byte[]));
-                string imgStr = System.Text.Encoding.Default.GetString(imgArray);
-                return cmdFactory.extractCommandFromStr("{42;SERVER;11;"+ cmd.Filename+"; none;"+imgStr+"}");
+                byte[] imgArray = (byte[])converter.ConvertTo(thumb, typeof(byte[]));               
+                return CommandFactory.createCommand(this.SmartAuthenticator.Id, SERVERNAME, SEND_CLIENT_THUMBNAIL, cmd.Filename, "none", imgArray);
+                
             }
-            return cmdFactory.extractCommandFromStr("{42;SERVER;7;none;no thumbnail avaible;none}");
+            return CommandFactory.createCommand(this.SmartAuthenticator.Id, SERVERNAME, STATUS, cmd.Filename, "no access", new byte[1]);
         }
 
         private Command logout()
         {
-            CommandFactory cmdFactory = new CommandFactory();
             this.SmartKiller.hardKill();
             this.SmartAuthenticator.logout();            
-            return cmdFactory.extractCommandFromStr("{-1;SERVER;7;none;OK;none}");
+            return CommandFactory.createCommand(-1, SERVERNAME, STATUS, "none", "OK", new byte[1]);
         }
 
         private Command getAvaibleFiles(Command cmd)
         {
-            CommandFactory cmdFactory = new CommandFactory();
+  
             XmlManager xmlManager = new XmlManager();
             FileManager fileManager = new FileManager();
             List<string> allFilePaths = fileManager.listAllFilesInCategoryFolders(xmlManager.getAllChilds());
             allFilePaths = sortFilesByCreationTime(allFilePaths);
-            return cmdFactory.createCommand(cmd.Id, SERVERNAME, SEND_AVAIBLE_FILES, "none", concatFiles(allFilePaths), "none");
+            return CommandFactory.createCommand(cmd.Id, SERVERNAME, SEND_AVAIBLE_FILES, "none", concatFiles(allFilePaths), new byte[1]);
         }
 
         private List<string> sortFilesByCreationTime(List<string> files)
@@ -144,9 +142,9 @@ namespace SmartTransferServer_V2._0
             {
                 FileManager fileManager = new FileManager();
                 fileManager.deleteFile(cmd.Filename);
-                return cmdFactory.extractCommandFromStr("{42;SERVER;7;"+cmd.Filename+";deleted file;none}");
+                return CommandFactory.createCommand(SmartAuthenticator.Id,SERVERNAME,STATUS,cmd.Filename,"deleted file",new byte[1]);
             }
-            return cmdFactory.extractCommandFromStr("{-1;SERVER;7;" + cmd.Filename + ";cant delete file;none}");
+            return CommandFactory.createCommand(SmartAuthenticator.Id, SERVERNAME, STATUS, cmd.Filename, "not deleted file", new byte[1]);
         }
 
         private Command saveDataOnServer(Command cmd)
@@ -162,16 +160,16 @@ namespace SmartTransferServer_V2._0
             {
                 
                 MyFileManager.saveFile(filename, cmd.Data);               
-                return cmdFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", "none");
+                return CommandFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", new byte[1]);
             }
             else
             {
                 MyFileManager.saveFile(filename, cmd.Data);
                 Logger.print("Path isnt allowed..");
-                return cmdFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", "none");
+                return CommandFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", new byte[1]);
             }
             cmd.Filename = filename;
-            return cmdFactory.extractCommandFromStr("{-1;SERVER;7;" + cmd.Filename + ";cant save file;none}");
+            return CommandFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "cant save file", new byte[1]);
         }
 
         private Command getDataFromServer(Command cmd)
@@ -179,9 +177,9 @@ namespace SmartTransferServer_V2._0
             string category = cmd.Parameter;
             string filename = cmd.Filename;
             FileManager MyFileManager = new FileManager();
-            string data = MyFileManager.loadFile(category, filename);
+            byte[] data = MyFileManager.loadFile(category, filename);
             CommandFactory cmdFactory = new CommandFactory();
-            return cmdFactory.createCommand(cmd.Id, SERVERNAME, SEND_DATA_TO_CLIENT, filename, category, data);
+            return CommandFactory.createCommand(cmd.Id, SERVERNAME, SEND_DATA_TO_CLIENT, filename, category, data);
         }
         public string concatFiles(List<String> allFiles)
         {

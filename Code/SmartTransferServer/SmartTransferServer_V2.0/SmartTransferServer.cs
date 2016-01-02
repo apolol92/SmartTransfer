@@ -54,23 +54,23 @@ namespace SmartTransferServer_V2._0
                 //Receive an encrypted RequestCommandStr
                 byte[] encryptedRequestComand = CmdReceiver.waitForCommand();
                 Logger.incomingCommand();
-                //Decrypt the encrypted RequestCommandStr
-                String decryptedRequestComandStr = CmdDecrypter.decrypt(encryptedRequestComand);
+                //Decrypt the encrypted RequestCommand
+                byte[] decryptedRequestComand = CmdDecrypter.decrypt(encryptedRequestComand);
                 //If the encrypted RequestCommandStr has got a wrong encryption..
-                if(decryptedRequestComandStr== Decrypter.WRONG_PASSWORD)
+                if(decryptedRequestComand== null)
                 {
-                    Logger.wrongPassword(decryptedRequestComandStr);
-                    SmartSenderAssistant.sendWrongPassword(CmdReceiver.CurrentClient);
+                    Logger.wrongPassword(" just wrong..");
+                    //SmartSenderAssistant.sendWrongPassword(CmdReceiver.CurrentClient);
                     continue;
                 }
                 Logger.correctPassword();
                 //Extract RequestCommandStr as Command-Instance
-                Command requestCommand = CmdFactory.extractCommandFromStr(decryptedRequestComandStr);
+                Command requestCommand = CommandFactory.extractCommand(decryptedRequestComand);
                 //If requestCommandStr has got the wrong format..
                 if(requestCommand== null)
                 {
-                    Logger.wrongCmdFormat(decryptedRequestComandStr);
-                    SmartSenderAssistant.sendWrongCommandFormat(CmdReceiver.CurrentClient);
+                    Logger.wrongCmdFormat(" just wrong format..");
+                    //SmartSenderAssistant.sendWrongCommandFormat(CmdReceiver.CurrentClient);
                     continue;
                 }
                 Logger.correctCmdFormat();
@@ -79,7 +79,7 @@ namespace SmartTransferServer_V2._0
                 if(SmartKiller.kill(requestCommand))
                 {
                     Logger.userKilled();
-                    SmartSenderAssistant.sendObituary(CmdReceiver.CurrentClient);
+                    //SmartSenderAssistant.sendObituary(CmdReceiver.CurrentClient);
                     SmartAuthenticator.Login = false;
                     continue;
                 }
@@ -92,7 +92,7 @@ namespace SmartTransferServer_V2._0
                     if (SmartAuthenticator.isNoLoginCommand(requestCommand))
                     {
                         Logger.isNoLoginCommand();
-                        SmartSenderAssistant.sendLoginRequired(CmdReceiver.CurrentClient);
+                        //SmartSenderAssistant.sendLoginRequired(CmdReceiver.CurrentClient);
                         continue;
                     }
                     //Client want to connect! .. let him.. PW checked before..
@@ -110,7 +110,7 @@ namespace SmartTransferServer_V2._0
                 if (SmartAuthenticator.isCorrectId(requestCommand)==false)
                 {
                     Logger.wrongId();
-                    SmartSenderAssistant.sendWrongId(CmdReceiver.CurrentClient);
+                    //SmartSenderAssistant.sendWrongId(CmdReceiver.CurrentClient);
                     continue;
                 }
                 Logger.correctId(requestCommand.Id);

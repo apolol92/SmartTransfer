@@ -19,10 +19,16 @@ public class Program {
 
 
     public static void main(String args[]) throws IOException {
+        String key = "test123456789123";
+        System.out.println("Create cmd");
         Command cmd = CommandFactory.createCommand(12, "USER", 4, "test", "sdf", FileManager.readeFile());
-        Sender.sendData(cmd.toByteArr());
-        Command received = CommandFactory.extractCommand(Receiver.receiveMsg(Sender.socket));
+        System.out.println("Send cmd");
+        Sender.sendData(Crypter.Encrypt(cmd.toByteArr(), key));
+        System.out.println("Receive cmd");
+        Command received = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket),key));
+        System.out.println("Save file");
         FileManager.saveFile(received.Data,"incoming");
+
         Sender.socket.close();
     }
 

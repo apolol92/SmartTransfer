@@ -28,7 +28,7 @@ public class FileManager {
             Files.write(path,data);
         }
         catch(IOException e) {
-
+            System.out.println("Failed saving..");
         }
 
     }

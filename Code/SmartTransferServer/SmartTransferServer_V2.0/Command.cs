@@ -13,13 +13,7 @@ namespace SmartTransferServer_V2._0
         int typ;
         string filename;
         string parameter;
-        string data;
-
-
-        public string toString()
-        {
-            return "{" + id + ";" + username + ";" + typ + ";" + filename + ";" + parameter + ";" + data + "}";
-        }
+        byte[] data;
 
         public int Id
         {
@@ -86,7 +80,7 @@ namespace SmartTransferServer_V2._0
             }
         }
 
-        public string Data
+        public byte[] Data
         {
             get
             {
@@ -98,5 +92,32 @@ namespace SmartTransferServer_V2._0
                 data = value;
             }
         }
+
+        public string printInnerHeader()
+        {
+            return id + ";" + username + ";" + typ + ";" + filename + ";" + parameter + ";" + data;
+        }
+
+        public byte[] toByteArr()
+        {
+            string b64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(printInnerHeader()));
+            string header = "{" + b64 + "}";
+            int len = header.Length + this.data.Length;
+            byte[] rawCmd = new byte[len];
+            for (int i = 0; i < len; i++)
+            {
+                if (i < header.Length)
+                {
+                    rawCmd[i] = (byte)header[i];
+                }
+                else
+                {
+                    rawCmd[i] = (byte)this.data[i - header.Length];
+                }
+            }
+            return rawCmd;
+        }
+
+
     }
 }

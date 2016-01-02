@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Command.cs" />
     <Compile Include="CommandFactory.cs" />
+    <Compile Include="Crypto.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
