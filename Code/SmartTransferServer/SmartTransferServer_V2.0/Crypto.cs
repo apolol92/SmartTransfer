@@ -25,15 +25,15 @@ namespace SmartTransferServer_V2._0
             };
         }
 
-        public static byte[] Encrypt(byte[] plainBytes, RijndaelManaged rijndaelManaged)
+        public static byte[] Encrypt(byte[] plainBytes, String secretKey)
         {
-            return rijndaelManaged.CreateEncryptor()
+            return GetRijndaelManaged(secretKey).CreateEncryptor()
                 .TransformFinalBlock(plainBytes, 0, plainBytes.Length);
         }
 
-        public static byte[] Decrypt(byte[] encryptedData, RijndaelManaged rijndaelManaged)
+        public static byte[] Decrypt(byte[] encryptedData, String secretKey)
         {
-            return rijndaelManaged.CreateDecryptor()
+            return GetRijndaelManaged(secretKey).CreateDecryptor()
                 .TransformFinalBlock(encryptedData, 0, encryptedData.Length);
         }
     }

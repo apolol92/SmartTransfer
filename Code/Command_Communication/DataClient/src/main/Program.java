@@ -76,6 +76,7 @@ public class Program {
         byte[] logoutCmdBytes = Crypter.Encrypt(logoutCmd.toByteArr(), key);
         Sender.sendData(logoutCmdBytes);
         Sender.socket.close();
+        System.out.println("FINISHED");
     }
 
 

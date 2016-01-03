@@ -9,13 +9,12 @@ namespace SmartTransferServer_V2._0
     public class SmartTransferServer
     {
         public static readonly int SERVER_PORT = 7000;
-        public string SERVER_PW;
+        public static string SERVER_PW;
 
         public SmartTransferServer()
         {
             XmlManager xmlManager = new XmlManager();
-            SERVER_PW = xmlManager.readServerPassword();
-            //xmlManager.deleteXml();
+            SERVER_PW = xmlManager.readServerPassword();         
             
         }
 
@@ -36,18 +35,18 @@ namespace SmartTransferServer_V2._0
         {            
             Cleaner SmartCleaner = new Cleaner();
             Receiver CmdReceiver = new Receiver();
-            Decrypter CmdDecrypter = new Decrypter(SERVER_PW);
+            //Decrypter CmdDecrypter = new Decrypter(SERVER_PW);
             CommandFactory CmdFactory = new CommandFactory();            
             SenderAssistant SmartSenderAssistant = new SenderAssistant();
             Authenticator SmartAuthenticator = new Authenticator();
             Killer SmartKiller = new Killer(SmartAuthenticator);
             Executor SmartExecutor = new Executor(SmartAuthenticator, SmartKiller);
-            Encrypter CmdEncrypter = new Encrypter(SERVER_PW);
+            //Encrypter CmdEncrypter = new Encrypter(SERVER_PW);
             Sender SmartSender = new Sender();
             while(true)
             {
                 //Read password everytime.. if changing..
-                this.SERVER_PW = readPassword();
+                SERVER_PW = readPassword();
                 //Clean following things before next round..
                 SmartCleaner.clean(CmdReceiver.CurrentClient);
                 Logger.getReady();
@@ -55,12 +54,12 @@ namespace SmartTransferServer_V2._0
                 byte[] encryptedRequestComand = CmdReceiver.waitForCommand();
                 Logger.incomingCommand();
                 //Decrypt the encrypted RequestCommand
-                byte[] decryptedRequestComand = CmdDecrypter.decrypt(encryptedRequestComand);
+                byte[] decryptedRequestComand = Crypto.Decrypt(encryptedRequestComand,SERVER_PW);
                 //If the encrypted RequestCommandStr has got a wrong encryption..
                 if(decryptedRequestComand== null)
                 {
                     Logger.wrongPassword(" just wrong..");
-                    //SmartSenderAssistant.sendWrongPassword(CmdReceiver.CurrentClient);
+                    SmartSenderAssistant.sendWrongPassword(CmdReceiver.CurrentClient);
                     continue;
                 }
                 Logger.correctPassword();
@@ -70,7 +69,7 @@ namespace SmartTransferServer_V2._0
                 if(requestCommand== null)
                 {
                     Logger.wrongCmdFormat(" just wrong format..");
-                    //SmartSenderAssistant.sendWrongCommandFormat(CmdReceiver.CurrentClient);
+                    SmartSenderAssistant.sendWrongCommandFormat(CmdReceiver.CurrentClient);
                     continue;
                 }
                 Logger.correctCmdFormat();
@@ -82,7 +81,7 @@ namespace SmartTransferServer_V2._0
                 if(SmartKiller.kill(requestCommand))
                 {
                     Logger.userKilled();
-                    //SmartSenderAssistant.sendObituary(CmdReceiver.CurrentClient);
+                    SmartSenderAssistant.sendObituary(CmdReceiver.CurrentClient);
                     SmartAuthenticator.Login = false;
                     continue;
                 }
@@ -95,7 +94,7 @@ namespace SmartTransferServer_V2._0
                     if (SmartAuthenticator.isNoLoginCommand(requestCommand))
                     {
                         Logger.isNoLoginCommand();
-                        //SmartSenderAssistant.sendLoginRequired(CmdReceiver.CurrentClient);
+                        SmartSenderAssistant.sendLoginRequired(CmdReceiver.CurrentClient);
                         continue;
                     }
                     //Client want to connect! .. let him.. PW checked before..
@@ -104,9 +103,8 @@ namespace SmartTransferServer_V2._0
                         SmartKiller.LastAlive = SmartKiller.GetCurrentUnixTimestampMillis();   
                         //SmartSenderAssistant.sendLoginSucceed(CmdReceiver.CurrentClient);
                         Command loginSucceedResponse = CmdFactory.createLoginSuceedCommand(SmartAuthenticator);
-                        Logger.loginSucceed(SmartAuthenticator.Id);
-                        Logger.print("HERE");
-                        SmartSender.send(loginSucceedResponse, CmdReceiver.CurrentClient,CmdEncrypter);
+                        Logger.loginSucceed(SmartAuthenticator.Id);                        
+                        SmartSender.send(loginSucceedResponse, CmdReceiver.CurrentClient);
                         continue;
                     }                                      
                 }
@@ -114,14 +112,14 @@ namespace SmartTransferServer_V2._0
                 if (SmartAuthenticator.isCorrectId(requestCommand)==false)
                 {
                     Logger.wrongId(requestCommand.Id);
-                    //SmartSenderAssistant.sendWrongId(CmdReceiver.CurrentClient);
+                    SmartSenderAssistant.sendWrongId(CmdReceiver.CurrentClient);
                     continue;
                 }
                 Logger.correctId(requestCommand.Id);
                 //All was allright.. now execute command
                 Command responseCommand = SmartExecutor.execute(requestCommand);
                 //Encrypt and send responseCommand to client
-                SmartSender.send(responseCommand,CmdReceiver.CurrentClient, CmdEncrypter);
+                SmartSender.send(responseCommand,CmdReceiver.CurrentClient);
                 Logger.finishedCommand();
             }
         }
