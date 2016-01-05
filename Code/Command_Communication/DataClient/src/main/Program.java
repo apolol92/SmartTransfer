@@ -27,7 +27,7 @@ public class Program {
         Command rLoginCmd = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket),key));
         Sender.socket.close();
         //List Data from Server
-        Command listCmd = CommandFactory.createCommand(rLoginCmd.Id,"USER",4,"none","none",new byte[1]);
+        Command listCmd = CommandFactory.createCommand(rLoginCmd.Id, "USER", 4, "none", "none",new byte[1]);
         byte[] listCmdBytes = Crypter.Encrypt(listCmd.toByteArr(), key);
         Sender.sendData(listCmdBytes);
         Command rListCmd = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket), key));
@@ -55,7 +55,7 @@ public class Program {
         byte[] deleteCmdBytes = Crypter.Encrypt(deleteCmd.toByteArr(), key);
         Sender.sendData(deleteCmdBytes);
         System.out.println("Wait for delete responds");
-        Command rDeleteCmd = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket),key));
+        Command rDeleteCmd = CommandFactory.extractCommand(Crypter.Decrypt(Receiver.receiveMsg(Sender.socket), key));
         System.out.println(rDeleteCmd.Parameter);
         Sender.socket.close();
         //Download Thumbnail

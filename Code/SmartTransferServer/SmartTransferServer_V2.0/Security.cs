@@ -9,16 +9,19 @@ namespace SmartTransferServer_V2._0
         {
         }
 
-        internal bool PathIsAllowed(List<string> allRootPaths, string requestPath)
+        public bool PathIsAllowed(List<string> allRootPaths, string requestPath)
         {
             foreach(string path in allRootPaths)
             {
-                if (requestPath.IndexOf(path) == 0)
+                if (path.IndexOf(requestPath) != -1)
                 {
+
                     return true;
                 }
             }
             return false;
         }
+
+        
     }
 }

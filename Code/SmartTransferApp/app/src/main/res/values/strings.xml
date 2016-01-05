@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SmartTransferApp</string>
+    <string name="title_activity_server_selection">ServerSelectionActivity</string>
+    <string name="title_activity_server_search">ServerSearchActivity</string>
+</resources>

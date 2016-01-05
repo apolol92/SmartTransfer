@@ -40,8 +40,7 @@ namespace SmartTransferServer_V2._0
                     Logger.getDataFromServer();
                     responseCommand =  getDataFromServer(cmd);
                     break;
-                case SAVE_DATA_ON_SERVER:
-                    Logger.saveDataOnServer(cmd);
+                case SAVE_DATA_ON_SERVER:                    
                     responseCommand = saveDataOnServer(cmd);
                     break;
                 case DELETE_FILE_FROM_SERVER:
@@ -81,6 +80,7 @@ namespace SmartTransferServer_V2._0
             Security SmartSecurity = new Security();
             XmlManager xmlManager = new XmlManager();
             List<string> allRootPaths = xmlManager.getAllChilds();
+            //TODO: IS IT A REAL IMAGE????
             Image image = Image.FromFile(cmd.Filename);
             Image thumb = image.GetThumbnailImage(120, 120, () => false, IntPtr.Zero);
             ImageConverter converter = new ImageConverter();
@@ -134,6 +134,7 @@ namespace SmartTransferServer_V2._0
             XmlManager xmlManager = new XmlManager();
             List<string> allRootPaths = xmlManager.getAllChilds();
             CommandFactory cmdFactory = new CommandFactory();
+            //TODO: IS FILE PATH ALLOWED?
             //if (SmartSecurity.PathIsAllowed(allRootPaths,cmd.Filename))
             //{
             FileManager fileManager = new FileManager();
@@ -144,38 +145,31 @@ namespace SmartTransferServer_V2._0
         }
 
         private Command saveDataOnServer(Command cmd)
-        {
-            Security SmartSecurity = new Security();
+        {            
             XmlManager xmlManager = new XmlManager();
             List<string> allRootPaths = xmlManager.getAllChilds();
             string category = cmd.Parameter;
             string filename = cmd.Filename;
             FileManager MyFileManager = new FileManager();
             CommandFactory cmdFactory = new CommandFactory();
-            if (SmartSecurity.PathIsAllowed(allRootPaths, filename))
-            {
-                
-                MyFileManager.saveFile(filename, cmd.Data);               
-                return CommandFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", new byte[1]);
-            }
-            else
-            {
-                MyFileManager.saveFile(filename, cmd.Data);
-                Logger.print("Path isnt allowed..");
-                return CommandFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", new byte[1]);
-            }
-            cmd.Filename = filename;
-            return CommandFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "cant save file", new byte[1]);
+            //TODO: IS PATH FOR SAVING DATA ALLOWED? (NOT SOOO IMPORTANT)     
+            MyFileManager.saveFile(filename, cmd.Data);
+            Logger.saveDataOnServer(cmd);
+            return CommandFactory.createCommand(cmd.Id, SERVERNAME, STATUS, filename, "saved file", new byte[1]);          
         }
 
         private Command getDataFromServer(Command cmd)
         {
+            XmlManager xmlManager = new XmlManager();
+            Security SmartSecurity = new Security();
             string category = cmd.Parameter;
             string filename = cmd.Filename;
+            //TODO: IS FILE PATH ALLOWED?            
             FileManager MyFileManager = new FileManager();
             byte[] data = MyFileManager.loadFile(category, filename);
-            CommandFactory cmdFactory = new CommandFactory();
+            Logger.getDataFromServer();                
             return CommandFactory.createCommand(cmd.Id, SERVERNAME, SEND_DATA_TO_CLIENT, filename, category, data);
+            
         }
         public string concatFiles(List<String> allFiles)
         {
