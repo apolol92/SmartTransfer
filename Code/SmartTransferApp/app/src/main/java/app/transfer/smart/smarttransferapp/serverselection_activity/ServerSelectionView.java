@@ -18,6 +18,7 @@ import app.transfer.smart.smarttransferapp.serversearch_activity.WlanServer;
  * you can enter a password and click on the connect button(childAt(2) in innerLayout)
  */
 public class ServerSelectionView extends LinearLayout {
+    private ServerSelectionActivity serverSelectionActivity;
     /**
      * InnterLayout of the view..
      */
@@ -32,9 +33,10 @@ public class ServerSelectionView extends LinearLayout {
      * @param context
      * @param wlanServer
      */
-    public ServerSelectionView(final Context context, final WlanServer wlanServer) {
+    public ServerSelectionView(final Context context, final WlanServer wlanServer, final ServerSelectionActivity serverSelectionActivity) {
         super(context);
         this.wlanServer = wlanServer;
+        this.serverSelectionActivity = serverSelectionActivity;
         //Inflate Layout
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.server_selection_view, this, true);
@@ -49,7 +51,9 @@ public class ServerSelectionView extends LinearLayout {
                 //Set current server
                 //SqliteManager.getInstance().setCurrentServer(wlanServer);
                 //Connect to
-                //ServerCommunicator.sendLogin(wlanServer,context);
+                ServerLoginCommander serverLoginCommander = new ServerLoginCommander(wlanServer,context,serverSelectionActivity);
+                serverLoginCommander.execute();
+
 
             }
         });

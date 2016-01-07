@@ -33,6 +33,7 @@ namespace SmartTransferServer_V2._0
 
         public static byte[] Decrypt(byte[] encryptedData, String secretKey)
         {
+
             return GetRijndaelManaged(secretKey).CreateDecryptor()
                 .TransformFinalBlock(encryptedData, 0, encryptedData.Length);
         }

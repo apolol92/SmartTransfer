@@ -89,7 +89,8 @@ public class WlanServerFinder extends AsyncTask<Void, Void, Void> {
         wServer.setIp(String.valueOf(packet.getAddress()));
         try {
             wServer.setName(new String(trim(packet.getData()), "UTF-8"));
-            wServer.setName(wServer.getName().substring(1));
+            wServer.setName(wServer.getName());
+            wServer.setIp(wServer.getIp().substring(1));
             return wServer;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
