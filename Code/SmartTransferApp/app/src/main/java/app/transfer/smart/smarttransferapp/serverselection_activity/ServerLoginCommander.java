@@ -66,6 +66,7 @@ public class ServerLoginCommander extends AsyncTask<Void,Void,Void> {
         Sender.sendData(Crypter.Encrypt(loginCmd.toByteArr(), this.wlanServer.getPw()), this.wlanServer);
         byte[] serverResponseBytes = Crypter.Decrypt(Receiver.receiveMsg(Sender.socket),wlanServer.getPw());
         this.serverResponse = CommandFactory.extractCommand(serverResponseBytes);
+        System.out.println(this.serverResponse.Id + " " + this.serverResponse.Username + " " + this.serverResponse.Typ);
         return null;
     }
 

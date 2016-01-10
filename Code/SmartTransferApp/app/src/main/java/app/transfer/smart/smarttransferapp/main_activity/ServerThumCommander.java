@@ -2,6 +2,7 @@ package app.transfer.smart.smarttransferapp.main_activity;
 
 import android.os.AsyncTask;
 
+import app.transfer.smart.smarttransferapp.main_activity.dfile.DFileView;
 import app.transfer.smart.smarttransferapp.server_communication.Command;
 import app.transfer.smart.smarttransferapp.server_communication.CommandFactory;
 import app.transfer.smart.smarttransferapp.server_communication.Crypter;
@@ -17,11 +18,12 @@ public class ServerThumCommander extends AsyncTask<Void,Void,Void> {
     private Integer lastId;
     private WlanServer wlanServer;
     private Command serverResponse;
+    DFileView dFileView;
 
-    public ServerThumCommander(WlanServer wlanServer, Integer lastId, byte[] data) {
+    public ServerThumCommander(WlanServer wlanServer, Integer lastId, DFileView dFileView) {
         this.wlanServer = wlanServer;
         this.lastId = lastId;
-        this.data = data;
+        this.dFileView = dFileView;
     }
 
     @Override
@@ -31,6 +33,7 @@ public class ServerThumCommander extends AsyncTask<Void,Void,Void> {
         byte[] serverResponseBytes = Crypter.Decrypt(Receiver.receiveMsg(Sender.socket), wlanServer.getPw());
         this.serverResponse = CommandFactory.extractCommand(serverResponseBytes);
         this.lastId = this.serverResponse.Id;
+        this.data = this.serverResponse.Data;
         return null;
     }
     /**
@@ -40,7 +43,7 @@ public class ServerThumCommander extends AsyncTask<Void,Void,Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-
+        this.dFileView.setThumbnail(this.data);
 
     }
 }

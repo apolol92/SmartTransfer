@@ -1,8 +1,6 @@
 package app.transfer.smart.smarttransferapp.main_activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -14,10 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import app.transfer.smart.smarttransferapp.R;
+import app.transfer.smart.smarttransferapp.main_activity.dfile.DFileListServer;
 import app.transfer.smart.smarttransferapp.serversearch_activity.WlanServer;
 import app.transfer.smart.smarttransferapp.serverselection_activity.ServerLoginCommander;
 
@@ -38,9 +38,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
-    private WlanServer wlanServer;
-    private Integer lastId;
+    public static WlanServer wlanServer;
+    public static Integer lastId;
 
+    public static DFileListServer dFileListServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
             this.wlanServer = (WlanServer)bundle.get(ServerLoginCommander.SERVER);
             Toast.makeText(getApplicationContext(),this.lastId + " "+this.wlanServer.getName(), Toast.LENGTH_SHORT).show();
         }
+        System.out.println(this.lastId);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -63,14 +65,9 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
+        //DFileListServer
+        //DFileListServer dFileListServer = new DFileListServer(getApplicationContext(), fileListStr, 4, (ScrollView)findViewById(R.id.main_scrollview_server), (LinearLayout)findViewById(R.id.server_selection_scroll_view_content);
 
     }
 
@@ -126,8 +123,14 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            System.out.println("OK");
+            HorizontalScrollView horizontalScrollView = (HorizontalScrollView) rootView.findViewById(R.id.server_selection_scroll_view);
+            LinearLayout linearLayout = (LinearLayout)rootView.findViewById(R.id.server_selection_scroll_view_content);
+            dFileListServer = new DFileListServer(rootView.getContext(),4,horizontalScrollView, linearLayout);
+            //List files on server and add it to dFileListServer
+            ServerListFilesCommander listFilesCommander = new ServerListFilesCommander(wlanServer,lastId,dFileListServer);
+            listFilesCommander.execute();
+
             return rootView;
         }
     }

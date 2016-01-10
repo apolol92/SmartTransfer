@@ -177,10 +177,10 @@ namespace SmartTransferServer_V2._0
             streamWriter.Close();
         }
 
-        public static void generatedNewId()
+        public static void generatedNewId(int id)
         {
             streamWriter = File.AppendText(LOG_PATH);
-            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "new id:new id generated", true);
+            streamWriter.WriteLine(GetCurrentUnixTimestampMillis() + ":" + "new id:new id generated " +id, true);
             streamWriter.Close();
         }
 

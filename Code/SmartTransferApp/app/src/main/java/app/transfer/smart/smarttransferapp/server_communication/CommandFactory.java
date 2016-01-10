@@ -111,6 +111,7 @@ public class CommandFactory {
     {
         Command cmd = new Command();
         cmd.Id = id;
+        System.out.println( cmd.Id);
         cmd.Username = username;
         cmd.Typ = typ;
         cmd.Filename = filename;

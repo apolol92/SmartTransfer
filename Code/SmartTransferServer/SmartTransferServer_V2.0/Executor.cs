@@ -64,7 +64,7 @@ namespace SmartTransferServer_V2._0
                     
             }
             responseCommand.Id = SmartAuthenticator.generateNewId();
-            Logger.generatedNewId();
+            Logger.generatedNewId(responseCommand.Id);
             return responseCommand;
         }
 
