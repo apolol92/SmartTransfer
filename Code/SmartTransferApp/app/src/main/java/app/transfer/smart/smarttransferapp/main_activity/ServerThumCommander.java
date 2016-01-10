@@ -2,7 +2,7 @@ package app.transfer.smart.smarttransferapp.main_activity;
 
 import android.os.AsyncTask;
 
-import app.transfer.smart.smarttransferapp.main_activity.dfile.DFileView;
+import app.transfer.smart.smarttransferapp.main_activity.dfile.DFile;
 import app.transfer.smart.smarttransferapp.server_communication.Command;
 import app.transfer.smart.smarttransferapp.server_communication.CommandFactory;
 import app.transfer.smart.smarttransferapp.server_communication.Crypter;
@@ -18,17 +18,17 @@ public class ServerThumCommander extends AsyncTask<Void,Void,Void> {
     private Integer lastId;
     private WlanServer wlanServer;
     private Command serverResponse;
-    DFileView dFileView;
+    DFile dFile;
 
-    public ServerThumCommander(WlanServer wlanServer, Integer lastId, DFileView dFileView) {
+    public ServerThumCommander(WlanServer wlanServer, Integer lastId, DFile dFile) {
         this.wlanServer = wlanServer;
         this.lastId = lastId;
-        this.dFileView = dFileView;
+        this.dFile = dFile;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
-        Command loginCmd = CommandFactory.createCommand(this.lastId, "USER", 10, "none", "none", new byte[1]);
+        Command loginCmd = CommandFactory.createCommand(this.lastId, "USER", 10, "C:\\Users\\Dennis\\Documents\\Programmierung\\Projekte\\SmartTransfer\\Code\\SmartTransferServer\\SmartTransferServer_V2.0\\bin\\Debug\\man.png", "none", new byte[1]);
         Sender.sendData(Crypter.Encrypt(loginCmd.toByteArr(), this.wlanServer.getPw()), this.wlanServer);
         byte[] serverResponseBytes = Crypter.Decrypt(Receiver.receiveMsg(Sender.socket), wlanServer.getPw());
         this.serverResponse = CommandFactory.extractCommand(serverResponseBytes);
@@ -43,7 +43,7 @@ public class ServerThumCommander extends AsyncTask<Void,Void,Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        this.dFileView.setThumbnail(this.data);
+        this.dFile.setThumbnail(this.data);
 
     }
 }

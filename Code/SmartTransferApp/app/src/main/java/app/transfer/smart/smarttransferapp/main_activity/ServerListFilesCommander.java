@@ -50,5 +50,7 @@ public class ServerListFilesCommander extends AsyncTask<Void,Void,Void> {
         this.dFileListServer.addDFiles2ScrollViewContent();
         //this.dFileListServer.downloadNdFiles();
         System.out.println("Finished listing..");
+        ServerThumCommander serverThumCommander = new ServerThumCommander(wlanServer,this.lastId,this.dFileListServer.dFiles.get(0));
+        serverThumCommander.execute();
     }
 }

@@ -18,10 +18,9 @@ public class ServerDownloadDataCommander  extends AsyncTask<Void,Void,Void> {
     private WlanServer wlanServer;
     private Command serverResponse;
 
-    public ServerDownloadDataCommander(WlanServer wlanServer, Integer lastId, byte[] data) {
+    public ServerDownloadDataCommander(WlanServer wlanServer, Integer lastId) {
         this.wlanServer = wlanServer;
         this.lastId = lastId;
-        this.data = data;
     }
 
     @Override
